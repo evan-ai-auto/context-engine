@@ -58,3 +58,33 @@ None remaining after closeout.
 ## Conclusion
 
 TASK-001 **passes** as a completed bootstrap task after closeout documentation and the version-test fix, contingent on validation commands succeeding in the closeout environment.
+
+---
+
+## Future Review Finding Template
+
+### P<priority>-<id>: <title>
+
+Severity:
+
+P0 / P1 / P2
+
+Problem:
+
+Describe the issue.
+
+Evidence:
+
+Provide verifiable evidence.
+
+Recommendation:
+
+Describe the recommended action.
+
+Resolution:
+
+Describe the implemented resolution if applicable.
+
+Status:
+
+OPEN / RESOLVED / ACCEPTED

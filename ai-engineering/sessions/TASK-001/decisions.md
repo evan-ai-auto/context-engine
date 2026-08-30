@@ -54,3 +54,29 @@ Architecture docs state packages should be created when needed; TASK-001 forbids
 
 Trade-off:
 Target architecture tree is not mirrored on disk yet; later tasks must introduce packages deliberately.
+
+---
+
+## Future Decision Record Template
+
+### Decision: <title>
+
+#### Context
+
+Why is this decision required?
+
+#### Decision
+
+What was chosen?
+
+#### Reason
+
+Why was this chosen?
+
+#### Trade-off
+
+What are the costs or limitations?
+
+#### Consequences
+
+What future impact may result from this decision?
