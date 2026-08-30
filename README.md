@@ -10,7 +10,7 @@ are not implemented yet.
 
 ## Installation
 
-Requires Python >= 3.8.0.
+Requires Python >= 3.10.
 
 ```bash
 pip install -e ".[dev]"

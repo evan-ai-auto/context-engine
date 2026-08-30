@@ -1,6 +1,5 @@
 """Typer CLI entry point for AI Context Engine."""
 
-from typing import Optional
 
 import typer
 
@@ -22,7 +21,7 @@ def _version_callback(value: bool) -> None:
 
 @app.callback()
 def main(
-    version: Optional[bool] = typer.Option(
+    version: bool | None = typer.Option(
         None,
         "--version",
         "-v",

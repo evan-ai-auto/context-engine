@@ -36,7 +36,9 @@ Before modifying `pyproject.toml`, implementation must verify the repository Pyt
 
 Because this is a new project, implementation planning may recommend raising the minimum supported Python version if required by the selected modern dependency and typing strategy.
 
-Stage A does **not** freeze a new minimum Python version unless already evidenced by existing repo policy.
+Stage A did not freeze a new minimum Python version at the time of writing.
+The repository policy is now **Python >= 3.10** (`requires-python` in `pyproject.toml`).
+Implementation must select a Pydantic 2.x constraint compatible with that policy.
 
 ### Consequences
 

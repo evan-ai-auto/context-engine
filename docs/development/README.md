@@ -6,7 +6,7 @@
 pip install -e ".[dev]"
 ```
 
-Requires Python >= 3.8.0.
+Requires Python >= 3.10.
 
 ## Checks
 
