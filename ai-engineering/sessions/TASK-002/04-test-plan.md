@@ -5,10 +5,12 @@
 Unit-test the domain package only. No repository filesystem fixtures.
 
 Framework: **pytest**  
-Models: **Pydantic v2**  
+Models: **Pydantic v2** on **Python >= 3.10**  
 Location: `tests/domain/` as specified in TASK-002
 
-Do not write tests in Stage A — this document is the specification only.
+Do not write tests during specification revisions — this document is the specification only.
+
+Frozen enum members (Revision-001) must be used exactly; do not invent extra members in tests as “valid”.
 
 ---
 
@@ -19,19 +21,27 @@ Do not write tests in Stage A — this document is the specification only.
 | T-01 | ProjectContext | Construct with valid nested data | succeeds |
 | T-02 | Required fields | Omit a required field | ValidationError |
 | T-03 | Optional fields | Omit optional description/language/version/scope/etc. | succeeds |
-| T-04 | ModuleType | Valid / invalid enum values | accept / reject |
-| T-05 | DependencyScope | Valid / invalid when present | accept / reject |
-| T-06 | EvidenceType | Valid / invalid | accept / reject |
+| T-04 | ModuleType | Each frozen member + one invalid | accept / reject |
+| T-05 | DependencyScope | Each frozen member when present + invalid | accept / reject |
+| T-06 | EvidenceType | Each frozen member + invalid | accept / reject |
 | T-07 | AnalysisStatus | `pending` / `partial` / `completed` / `failed` + invalid | accept / reject |
 | T-08 | Multiple Evidence | Two+ evidence records on Technology and Dependency | succeeds |
 | T-09 | Ecosystem | Required `Dependency.ecosystem` string; omit → reject | |
 | T-10 | Ownership | External deps only via `project_dependencies` | field present; no `dependencies` |
 | T-11 | Module.depends_on | Internal module name list (incl. default `[]`) | succeeds |
 | T-12 | Partial context | `metadata.analysis_status = partial` with sparse modules/deps | succeeds |
-| T-13 | Serialization | `model_dump` JSON-friendly | succeeds |
-| T-14 | Deserialization | dump → JSON → `model_validate` | semantic round-trip |
-| T-15 | Invalid model | Bad structure / bad enum / missing required | ValidationError |
-| T-16 | Regression | Existing CLI tests | still pass |
+| T-13 | generated_at | `datetime` (tz-aware UTC preferred); reject plain str domain assignment if invalid | succeeds / ValidationError |
+| T-14 | Serialization | `model_dump` JSON-friendly (ISO datetime) | succeeds |
+| T-15 | Deserialization | dump → JSON → `model_validate` | semantic round-trip |
+| T-16 | Invalid model | Bad structure / bad enum / missing required | ValidationError |
+| T-17 | Regression | Existing CLI tests | still pass |
+
+### Frozen enum vocabularies under test
+
+- **ModuleType:** `application`, `library`, `service`, `tool`, `unknown`
+- **DependencyScope:** `compile`, `runtime`, `test`, `development`, `optional`, `unknown`
+- **EvidenceType:** `build_file`, `lock_file`, `manifest`, `source`, `config`, `other`
+- **AnalysisStatus:** `pending`, `partial`, `completed`, `failed`
 
 ---
 

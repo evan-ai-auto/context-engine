@@ -4,7 +4,11 @@
 
 Do not maintain a parallel `decisions.md`.
 
-Status: **FROZEN** after Stage A — Comprehensive Domain Architecture Reconciliation.
+Status: **FROZEN** after Stage A, with **Revision-001** contract finalization applied.
+
+Revision-001:
+
+[`ai-engineering/tasks/TASK-002-revision-001-domain-contract-finalization.md`](../../tasks/TASK-002-revision-001-domain-contract-finalization.md)
 
 Implementation must not invent new architecture decisions. If a conflict with this document is discovered during implementation, stop and report it.
 
@@ -28,17 +32,19 @@ TASK-002 requires validated, serializable domain models without using `dict[str,
 
 Use **Pydantic v2** as the domain modeling foundation.
 
-Do **not** add Pydantic to `pyproject.toml` during Stage A.
+Do **not** add Pydantic to `pyproject.toml` until TASK-002 implementation begins (after compatibility inspection).
 
-### Implementation note
+### Python policy (frozen — Revision-001)
 
-Before modifying `pyproject.toml`, implementation must verify the repository Python compatibility policy and select a Pydantic 2.x constraint compatible with that policy.
+Implementation targets **Python >= 3.10**.
 
-Because this is a new project, implementation planning may recommend raising the minimum supported Python version if required by the selected modern dependency and typing strategy.
+Repository packaging policy:
 
-Stage A did not freeze a new minimum Python version at the time of writing.
-The repository policy is now **Python >= 3.10** (`requires-python` in `pyproject.toml`).
-Implementation must select a Pydantic 2.x constraint compatible with that policy.
+- `requires-python = ">=3.10"`
+- Ruff `target-version = "py310"`
+- mypy `python_version = "3.10"`
+
+Select a Pydantic 2.x constraint compatible with Python 3.10+. Do not leave the minimum Python version undecided.
 
 ### Consequences
 
@@ -56,18 +62,22 @@ Stable taxonomies need hard validation; fast-evolving labels must remain extensi
 
 Use explicit string-based enums (`str, Enum`) for the following **canonical** set only:
 
-| Enum | Purpose |
-|------|---------|
-| `ModuleType` | Module taxonomy |
-| `DependencyScope` | External dependency scope |
-| `EvidenceType` | Evidence source classification |
-| `AnalysisStatus` | Whole-context analysis completeness |
+| Enum | Purpose | Frozen members (Revision-001) |
+|------|---------|-------------------------------|
+| `ModuleType` | Module taxonomy | `application`, `library`, `service`, `tool`, `unknown` |
+| `DependencyScope` | External dependency scope | `compile`, `runtime`, `test`, `development`, `optional`, `unknown` |
+| `EvidenceType` | Evidence source classification | `build_file`, `lock_file`, `manifest`, `source`, `config`, `other` |
+| `AnalysisStatus` | Whole-context analysis completeness | `pending`, `partial`, `completed`, `failed` |
+
+`DependencyScope` values are normalized cross-ecosystem concepts. Do not add Maven-, Gradle-, npm-, or Python-specific scope enum members; analyzers normalize source-specific scopes later.
 
 Do **not** introduce a `DependencyEcosystem` enum.
 
 `Dependency.ecosystem` remains a **plain `str`** (e.g. Maven, PyPI, npm, Cargo, Go Modules) so new ecosystems do not require Core Domain Model changes.
 
 Open strings remain for names, versions, paths, languages, build tools, technology category, and similar labels.
+
+Implementation must **not** invent additional enum members beyond the frozen tables above.
 
 ### Consequences
 
@@ -153,6 +163,17 @@ Canonical values:
 - `partial`
 - `completed`
 - `failed`
+
+### GenerationMetadata.generated_at (Revision-001)
+
+Freeze:
+
+`GenerationMetadata.generated_at: datetime`
+
+- Typed datetime object in the domain model
+- Prefer timezone-aware UTC timestamps
+- Do **not** allow `datetime | str` or “ISO str” as an alternate domain type
+- ISO 8601 conversion is handled by Pydantic serialization/deserialization
 
 Do **not** introduce per-module or per-analyzer status models in TASK-002.
 

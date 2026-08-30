@@ -2,9 +2,13 @@
 
 ## Status
 
-SPECIFICATION_FROZEN — awaiting pre-implementation inspection gate
+SPECIFICATION_FROZEN — awaiting Repository Compatibility Inspection gate
 
 Stage A (Comprehensive Domain Architecture Reconciliation) is complete.
+
+Revision-001 (Domain Contract Finalization) is **COMPLETED_PENDING_REVIEW**.
+
+Implementation targets **Python >= 3.10**.
 
 Implementation of `src/ai_context/domain/` has **not** started.
 
@@ -18,6 +22,7 @@ Implementation of `src/ai_context/domain/` has **not** started.
 | Canonical ADRs | [`architecture-decisions.md`](./architecture-decisions.md) |
 | Canonical domain contract | [`03-domain-model-contract.md`](./03-domain-model-contract.md) |
 | Stage A brief | [`TASK-002 Stage A — Comprehensive Domain Architecture Reconciliation.md`](../../tasks/TASK-002%20Stage%20A%20—%20Comprehensive%20Domain%20Architecture%20Reconciliation.md) |
+| Revision-001 | [`TASK-002-revision-001-domain-contract-finalization.md`](../../tasks/TASK-002-revision-001-domain-contract-finalization.md) |
 
 `decisions.md` is deleted and must not be referenced as a source.
 
@@ -47,11 +52,11 @@ Establish the core **Project Context** domain model for AI Context Engine: a lan
 
 ## Frozen architecture (summary)
 
-1. **ADR-001** Pydantic v2 (add dependency only at implementation; verify Python compatibility first)
-2. **ADR-002** Enums: `ModuleType`, `DependencyScope`, `EvidenceType`, `AnalysisStatus` only; ecosystem is `str`
+1. **ADR-001** Pydantic v2 on Python >= 3.10 (add dependency only at implementation)
+2. **ADR-002** Enums with frozen members: ModuleType / DependencyScope / EvidenceType / AnalysisStatus; ecosystem is `str`
 3. **ADR-003** `list[Evidence]` on Technology and Dependency; fields `source_file`, `source_type`, `detail`
 4. **ADR-004** `Module.depends_on` vs `ProjectContext.project_dependencies`; `Dependency.ecosystem`; optional `declared_by`; no graph
-5. **ADR-005** `GenerationMetadata.analysis_status: AnalysisStatus` for partial context
+5. **ADR-005** `GenerationMetadata.analysis_status`; `generated_at: datetime`
 
 Details: [`architecture-decisions.md`](./architecture-decisions.md)  
 Contract: [`03-domain-model-contract.md`](./03-domain-model-contract.md)

@@ -6,11 +6,14 @@ SPECIFICATION_FROZEN
 
 Stage A — Comprehensive Domain Architecture Reconciliation is complete.
 
-The specification is frozen and ready for the **pre-implementation inspection gate**.
+Revision-001 — Domain Contract Finalization is **COMPLETED_PENDING_REVIEW**.
+
+The specification is frozen and ready for the **Repository Compatibility Inspection** / pre-implementation gate.
 
 - Do **not** mark TASK-002 as DONE
 - Do **not** treat implementation as complete
 - Implementation of `src/ai_context/domain/` has **not** started
+- Implementation targets **Python >= 3.10**
 
 ## Canonical sources
 
@@ -20,17 +23,18 @@ The specification is frozen and ready for the **pre-implementation inspection ga
 | Domain contract | [`sessions/TASK-002/03-domain-model-contract.md`](../sessions/TASK-002/03-domain-model-contract.md) |
 | Session pack | [`sessions/TASK-002/`](../sessions/TASK-002/) |
 | Stage A task | [`TASK-002 Stage A — Comprehensive Domain Architecture Reconciliation.md`](./TASK-002%20Stage%20A%20—%20Comprehensive%20Domain%20Architecture%20Reconciliation.md) |
+| Revision-001 | [`TASK-002-revision-001-domain-contract-finalization.md`](./TASK-002-revision-001-domain-contract-finalization.md) |
 | Decision review | [`reviews/TASK-002-architecture-decision-review.md`](../reviews/TASK-002-architecture-decision-review.md) |
 
 `sessions/TASK-002/decisions.md` has been deleted and is not a source of truth.
 
 ## Frozen architecture decisions (summary)
 
-- ADR-001 — Pydantic v2 (add at implementation after Python compatibility check)
-- ADR-002 — Enums: `ModuleType`, `DependencyScope`, `EvidenceType`, `AnalysisStatus`; ecosystem is `str`
+- ADR-001 — Pydantic v2 on **Python >= 3.10** (add Pydantic at implementation only)
+- ADR-002 — Enums with frozen members: ModuleType / DependencyScope / EvidenceType / AnalysisStatus; ecosystem is `str`
 - ADR-003 — `list[Evidence]` on Technology and Dependency (`source_file`, `source_type`, `detail`)
 - ADR-004 — `Module.depends_on` vs `ProjectContext.project_dependencies`; `Dependency.ecosystem`; optional `declared_by`; no `DependencyGraph`
-- ADR-005 — `GenerationMetadata.analysis_status: AnalysisStatus` for partial context
+- ADR-005 — `GenerationMetadata.analysis_status`; `generated_at: datetime` (Revision-001)
 
 ---
 
@@ -255,7 +259,7 @@ Required:
 
 - engine_version
 - schema_version
-- generated_at
+- generated_at (`datetime`; timezone-aware UTC preferred; not `str`)
 - analysis_status (`AnalysisStatus`: pending | partial | completed | failed)
 
 ---

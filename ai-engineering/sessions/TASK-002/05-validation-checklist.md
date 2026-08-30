@@ -1,25 +1,28 @@
 # 05 — TASK-002 Validation Checklist
 
-Complete only with **actually executed** results after implementation. Stage A does not execute product validation commands.
+Complete only with **actually executed** results after implementation. Specification revisions do not execute product validation commands.
 
 ---
 
-## Specification freeze (Stage A)
+## Specification freeze (Stage A + Revision-001)
 
 - [x] Canonical ADRs in `architecture-decisions.md`
 - [x] Canonical contract in `03-domain-model-contract.md`
 - [x] `decisions.md` deleted
 - [x] `project_dependencies` naming reconciled
 - [x] Multiple evidence + ecosystem + analysis_status documented
+- [x] Python >= 3.10 frozen in `pyproject.toml` and specs (Revision-001)
+- [x] Enum members frozen for all four enums (Revision-001)
+- [x] `generated_at: datetime` frozen (Revision-001)
 
 ---
 
 ## Preconditions (implementation)
 
-- [ ] Architecture remains frozen (no silent redesign)
+- [ ] Architecture remains frozen (no silent redesign; no extra enum members)
 - [ ] Implementation matches `03-domain-model-contract.md`
 - [ ] No scanner / analyzer / generator / new CLI features added
-- [ ] Python/Pydantic compatibility verified before `pyproject.toml` change
+- [ ] Pydantic 2.x pin chosen for Python >= 3.10 before adding to `pyproject.toml`
 
 ---
 
@@ -28,11 +31,13 @@ Complete only with **actually executed** results after implementation. Stage A d
 - [ ] Aggregate uses `project_dependencies` (not `dependencies`)
 - [ ] Required vs optional fields match contract
 - [ ] Enums limited to ModuleType, DependencyScope, EvidenceType, AnalysisStatus
+- [ ] Enum members match frozen vocabularies exactly
 - [ ] `Dependency.ecosystem` is required `str` (not enum)
 - [ ] `Technology.evidence` and `Dependency.evidence` are `list[Evidence]`
 - [ ] Evidence fields: `source_file`, `source_type`, `detail`
 - [ ] `Module.depends_on` present; no `Module.dependencies`
 - [ ] `GenerationMetadata.analysis_status` present
+- [ ] `GenerationMetadata.generated_at` is `datetime` (not `str`)
 - [ ] Public package API exports core models from `domain`
 
 ---
@@ -41,7 +46,7 @@ Complete only with **actually executed** results after implementation. Stage A d
 
 - [ ] Multiple evidence records supported
 - [ ] Partial context via `analysis_status=partial` supported
-- [ ] Serialization round-trip works
+- [ ] Serialization round-trip works (including datetime ↔ ISO)
 - [ ] Invalid enums / missing required fields fail validation
 - [ ] Existing tests still pass
 
@@ -51,7 +56,7 @@ Complete only with **actually executed** results after implementation. Stage A d
 
 | Command | Result | Notes |
 |---------|--------|-------|
-| `python --version` | _pending_ | |
+| `python --version` | _pending_ | expect >= 3.10 |
 | `pip install -e ".[dev]"` | _pending_ | |
 | `pytest` | _pending_ | |
 | `ruff check .` | _pending_ | |
@@ -64,7 +69,8 @@ Complete only with **actually executed** results after implementation. Stage A d
 | Role | Name / Agent | Date | Outcome |
 |------|--------------|------|---------|
 | Stage A reconciler | | | SPECIFICATION_FROZEN |
+| Revision-001 | | | COMPLETED_PENDING_REVIEW |
 | Implementer | | | |
 | Reviewer | | | |
 
-Status: **SPECIFICATION_FROZEN** (implementation not started)
+Status: **SPECIFICATION_FROZEN** + Revision-001 finalized (implementation not started)

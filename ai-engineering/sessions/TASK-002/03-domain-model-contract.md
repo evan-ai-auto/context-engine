@@ -1,10 +1,12 @@
 # 03 — Domain Model Contract
 
-**Canonical domain contract for TASK-002.** Frozen after Stage A.
+**Canonical domain contract for TASK-002.** Frozen after Stage A; enum members and `generated_at` finalized in Revision-001.
 
 Implementation must match this document and [`architecture-decisions.md`](./architecture-decisions.md).
 
-Do not invent fields, rename ownership, or change required/optional semantics during implementation without a new architecture decision.
+Do not invent fields, rename ownership, change required/optional semantics, or add enum members during implementation without a new architecture decision.
+
+Implementation targets **Python >= 3.10**.
 
 ---
 
@@ -26,12 +28,16 @@ There is no `ProjectContext.dependencies` field.
 
 ## Canonical enums
 
-| Enum | Values (canonical) |
-|------|--------------------|
-| `ModuleType` | Implementation chooses explicit members consistent with known module kinds (e.g. application, library, service, unknown). Members must be stable string enums. |
-| `DependencyScope` | Explicit scope members as needed (e.g. compile, runtime, test, optional, unknown). |
-| `EvidenceType` | Explicit evidence kinds (e.g. build_file, lock_file, manifest, source, config, other). |
+Stable `str, Enum` types. **Members are frozen** (Revision-001). Implementation must not invent additional members.
+
+| Enum | Frozen members |
+|------|----------------|
+| `ModuleType` | `application`, `library`, `service`, `tool`, `unknown` |
+| `DependencyScope` | `compile`, `runtime`, `test`, `development`, `optional`, `unknown` |
+| `EvidenceType` | `build_file`, `lock_file`, `manifest`, `source`, `config`, `other` |
 | `AnalysisStatus` | `pending`, `partial`, `completed`, `failed` |
+
+`DependencyScope` is a normalized cross-ecosystem vocabulary. Ecosystem-specific scopes are normalized by analyzers later — do not add Maven/Gradle/npm/Python-specific enum values.
 
 Not enums:
 
@@ -111,7 +117,7 @@ Do **not** add `Module.dependencies`.
 |-------|------|----------|--------|
 | engine_version | `str` | **required** | |
 | schema_version | `str` | **required** | |
-| generated_at | datetime or ISO `str` | **required** | prefer timezone-aware UTC if using datetime |
+| generated_at | `datetime` | **required** | timezone-aware UTC preferred; **not** `str` / `datetime \| str` |
 | analysis_status | `AnalysisStatus` | **required** | whole-context completeness |
 
 ---
@@ -169,3 +175,5 @@ Domain model
 - Evidence on Module / ProjectInfo
 - `ProjectInfo.type` enum/field
 - `Technology.category` as enum
+- Additional members beyond the frozen enum tables
+- `generated_at` as `str` or `datetime | str`

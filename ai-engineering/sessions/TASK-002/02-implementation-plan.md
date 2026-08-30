@@ -17,25 +17,25 @@ Canonical sources:
 
 - [x] Stage A architecture reconciliation complete
 - [x] Specification frozen
-- [ ] Pre-implementation inspection gate passed
-- [ ] Pydantic not yet added to `pyproject.toml` (Stage A constraint)
+- [x] Revision-001 domain contract finalization complete (Python 3.10+, enum members, `generated_at: datetime`)
+- [ ] Pre-implementation / Repository Compatibility Inspection gate passed
+- [ ] Pydantic not yet added to `pyproject.toml`
 
 ---
 
 ## Work sequence
 
-### Step 0 — Compatibility gate
+### Step 0 — Dependency gate
 
-1. Read repository Python policy (`requires-python` in `pyproject.toml`)
-2. Choose a Pydantic v2 constraint compatible with that policy
-3. If modern typing/dependency strategy requires raising minimum Python, **report the recommendation** before silently changing policy
-4. Only then modify `pyproject.toml` and reinstall: `pip install -e ".[dev]"`
+1. Confirm repository Python policy is `>=3.10` in `pyproject.toml` (already frozen)
+2. Choose a Pydantic v2 constraint compatible with Python 3.10+
+3. Add Pydantic to runtime dependencies and reinstall: `pip install -e ".[dev]"`
 
 If any conflict with the frozen contract appears, **stop and report** — do not redesign.
 
 ### Step 1 — Enums and Evidence
 
-1. Implement `ModuleType`, `DependencyScope`, `EvidenceType`, `AnalysisStatus`
+1. Implement frozen enums with **exact** members from the contract (no extras)
 2. Implement `Evidence` (`source_file`, `source_type`, `detail`)
 3. Tests: valid evidence; invalid enum rejection; multiple evidence lists
 
@@ -46,7 +46,7 @@ If any conflict with the frozen contract appears, **stop and report** — do not
 3. `Module` — `ModuleType`, optional language/build_tool, `depends_on: list[str]`
 4. `Technology` — optional category/version; `evidence: list[Evidence]`
 5. `Dependency` — required `ecosystem: str`; optional scope/declared_by/version; `evidence: list[Evidence]`
-6. `GenerationMetadata` — includes required `analysis_status`
+6. `GenerationMetadata` — required `analysis_status`; `generated_at: datetime` (tz-aware UTC preferred)
 
 ### Step 3 — Aggregate
 
