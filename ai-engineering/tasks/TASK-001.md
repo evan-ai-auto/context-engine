@@ -2,7 +2,19 @@
 
 ## Status
 
-TODO
+DONE
+
+## Completion
+
+Verified bootstrap outcomes for TASK-001:
+
+- project bootstrap completed (`pyproject.toml`, src-layout package, `.gitignore`)
+- CLI scaffold created (`ai-context` with `--help`, `--version`, placeholder `init`)
+- test baseline created (`tests/unit/test_cli.py`: help, version, init)
+- packaging configuration created (hatchling, editable install entry point)
+- documentation baseline created (root README, `docs/development/README.md`)
+
+Not in scope for this task and not implemented: repository analysis, `.ai-context` generation, or other v0.1 analyzers.
 
 ## Objective
 
@@ -353,14 +365,14 @@ Expected deliverables:
 
 Before marking the task complete:
 
-- [ ] Required directory structure exists
-- [ ] `pyproject.toml` configured
-- [ ] Package installs successfully
-- [ ] CLI works
-- [ ] CLI tests exist
-- [ ] pytest passes
-- [ ] Ruff passes
-- [ ] MyPy passes
-- [ ] README updated
-- [ ] Git diff reviewed
-- [ ] Task execution record created
+- [x] Required directory structure exists
+- [x] `pyproject.toml` configured
+- [x] Package installs successfully
+- [x] CLI works
+- [x] CLI tests exist
+- [x] pytest passes
+- [x] Ruff passes
+- [x] MyPy passes
+- [x] README updated
+- [x] Git diff reviewed
+- [x] Task execution record created

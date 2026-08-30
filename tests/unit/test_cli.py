@@ -2,6 +2,7 @@
 
 from typer.testing import CliRunner
 
+from ai_context import __version__
 from ai_context.cli.main import app
 
 runner = CliRunner()
@@ -17,7 +18,7 @@ def test_cli_help() -> None:
 def test_cli_version() -> None:
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "0.1.0" in result.stdout
+    assert __version__ in result.stdout
 
 
 def test_cli_init_placeholder() -> None:
