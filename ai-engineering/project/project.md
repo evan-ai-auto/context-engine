@@ -296,6 +296,7 @@ Integrate with:
 - Workflows
 - MCP
 - Evaluation Systems
+- Extraction Detector
 
 ---
 
@@ -378,6 +379,9 @@ Development Process Recording
 Pattern Analysis
         │
         ▼
+Extraction Detector
+        │
+        ▼
 Capability Extraction
         │
         ├── Agent
@@ -396,6 +400,88 @@ Evaluation
         ▼
 Iteration
 ```
+
+---
+
+## 9.1 Extraction Detector
+
+Extraction Detector is a planned capability of the AI Engineering loop around AI Context Engine.
+
+Its purpose is to detect reusable engineering capabilities from recorded development work, before those capabilities are formalized into Agents, Skills, or Workflows.
+
+```text
+Session / Task / Review / Learning records
+                │
+                ▼
+        Extraction Detector
+                │
+        ┌───────┼───────┐
+        │       │       │
+        ▼       ▼       ▼
+   Agent     Skill   Workflow
+  candidate candidate candidate
+```
+
+### Problem it solves
+
+Without detection, extraction depends on manual judgment:
+
+- which steps are repeatable
+- which prompts are reusable
+- which review checks should become gates
+- which workflows can be regenerated on the next project
+
+Extraction Detector should make candidate discovery systematic.
+
+### Planned inputs
+
+- `ai-engineering/sessions/`
+- `ai-engineering/tasks/`
+- `ai-engineering/reviews/`
+- `ai-engineering/learnings/`
+- optional: prompts, evaluation notes, revision records
+
+### Planned detection targets
+
+- **Agent candidates** — recurring roles (e.g. bootstrap, reviewer, debugger)
+- **Skill candidates** — repeatable procedures with clear inputs/outputs
+- **Workflow candidates** — ordered multi-step chains across tasks
+- **Engineering rules** — constraints that repeatedly prevent failure
+- **Evaluation rules** — checks that repeatedly decide pass/fail
+
+### Planned outputs
+
+Structured extraction candidates under `ai-engineering/extraction/`, for example:
+
+- suggested name
+- category (agent / skill / workflow / rule)
+- evidence references (session/task/review paths)
+- confidence / maturity
+- recommended next formalization step
+
+### Non-goals (initial planning)
+
+Extraction Detector should not initially:
+
+- auto-publish into an external AI Engineering library
+- replace human review of extraction quality
+- implement repository code analysis (that belongs to Context Generation)
+- require LLM-only detection (deterministic heuristics first; LLM assist optional later)
+
+### Position vs Context Engine core
+
+| Capability | Focus |
+|------------|--------|
+| Context Generation (`ai-context init`) | Analyze a **software repository** → `.ai-context` |
+| Extraction Detector | Analyze **AI engineering process records** → extraction candidates |
+
+They share the same project but operate on different sources of truth.
+
+### Evolution hint
+
+- Near-term: checklist / heuristic detection from TASK/session/review structure
+- Mid-term: pattern scoring across multiple tasks
+- Later: optional assisted summarization, then human-approved extraction packages
 
 ---
 
