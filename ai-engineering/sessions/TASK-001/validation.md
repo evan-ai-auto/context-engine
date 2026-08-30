@@ -11,7 +11,7 @@ Status: PASSED
 ```text
 ============================= test session starts =============================
 platform win32 -- Python 3.8.0, pytest-8.3.5, pluggy-1.5.0
-rootdir: E:\work\dev_workspace\my_windows\context-engine
+rootdir: <repository-root>
 configfile: pyproject.toml
 testpaths: tests
 collected 3 items
