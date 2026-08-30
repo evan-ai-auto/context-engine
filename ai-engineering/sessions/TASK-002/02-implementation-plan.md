@@ -2,61 +2,64 @@
 
 ## Goal
 
-Deliver the locked Project Context domain contract under `src/ai_context/domain/` with tests, without implementing analyzers or generators.
+Deliver the **frozen** Project Context domain contract under `src/ai_context/domain/` with tests.
+
+Architecture is frozen. Do not make new architecture decisions during implementation.
+
+Canonical sources:
+
+- [`architecture-decisions.md`](./architecture-decisions.md)
+- [`03-domain-model-contract.md`](./03-domain-model-contract.md)
 
 ---
 
 ## Prerequisites
 
-- [x] Architecture decisions locked
-- [x] TASK-002 status: `READY_FOR_IMPLEMENTATION`
-- [ ] Pydantic v2 dependency not yet added to `pyproject.toml`
+- [x] Stage A architecture reconciliation complete
+- [x] Specification frozen
+- [ ] Pre-implementation inspection gate passed
+- [ ] Pydantic not yet added to `pyproject.toml` (Stage A constraint)
 
 ---
 
 ## Work sequence
 
-### Step 1 — Dependency
+### Step 0 — Compatibility gate
 
-1. Add Pydantic v2 runtime dependency compatible with Python `>=3.8.0`
-2. Pin a 3.8-compatible Pydantic 2.x line in `pyproject.toml`
-3. Reinstall editable env: `pip install -e ".[dev]"`
+1. Read repository Python policy (`requires-python` in `pyproject.toml`)
+2. Choose a Pydantic v2 constraint compatible with that policy
+3. If modern typing/dependency strategy requires raising minimum Python, **report the recommendation** before silently changing policy
+4. Only then modify `pyproject.toml` and reinstall: `pip install -e ".[dev]"`
 
-### Step 2 — Enums and Evidence first
+If any conflict with the frozen contract appears, **stop and report** — do not redesign.
 
-1. Define taxonomy enums (`str, Enum`) for:
-   - project type
-   - module type
-   - technology category
-   - dependency scope
-   - evidence type
-2. Implement shared `Evidence` model (`file`, `type`)
-3. Unit tests: valid evidence + invalid enum rejection
+### Step 1 — Enums and Evidence
 
-### Step 3 — Leaf entities
+1. Implement `ModuleType`, `DependencyScope`, `EvidenceType`, `AnalysisStatus`
+2. Implement `Evidence` (`source_file`, `source_type`, `detail`)
+3. Tests: valid evidence; invalid enum rejection; multiple evidence lists
 
-Implement and test independently:
+### Step 2 — Leaf entities
 
-1. `ProjectInfo`
-2. `RepositoryInfo` (portable `root_path`; optional `branch` / `commit`)
-3. `Module` including `depends_on: List[str]`
-4. `Technology` with `Optional[Evidence]`
-5. `Dependency` with `Optional[Evidence]` and optional `declared_by`
-6. `GenerationMetadata`
+1. `ProjectInfo` — required `name`; optional `description`, `primary_language`
+2. `RepositoryInfo` — portable `root_path`; optional `branch` / `commit`
+3. `Module` — `ModuleType`, optional language/build_tool, `depends_on: list[str]`
+4. `Technology` — optional category/version; `evidence: list[Evidence]`
+5. `Dependency` — required `ecosystem: str`; optional scope/declared_by/version; `evidence: list[Evidence]`
+6. `GenerationMetadata` — includes required `analysis_status`
 
-### Step 4 — Aggregate root
+### Step 3 — Aggregate
 
-1. Implement `ProjectContext` composing all entities
-2. Tests: construction with valid nested data
-3. Serialization round-trip: `model_dump` → JSON → `model_validate`
-4. Required-field and optional-field cases
+1. `ProjectContext` with `project_dependencies` (not `dependencies`)
+2. Construction, required/optional, partial `analysis_status`
+3. Serialization round-trip
 
-### Step 5 — Package exports
+### Step 4 — Exports and isolation
 
-1. Export public models from `domain/__init__.py`
-2. Ensure domain package imports no scanner / filesystem / CLI modules
+1. Public exports from `domain/__init__.py`
+2. Confirm no scanner/filesystem/CLI imports
 
-### Step 6 — Quality gates
+### Step 5 — Quality gates
 
 ```bash
 pytest
@@ -64,7 +67,7 @@ ruff check .
 mypy src
 ```
 
-Confirm existing CLI tests still pass (AC-012).
+Record results in [`05-validation-checklist.md`](./05-validation-checklist.md).
 
 ---
 
@@ -72,31 +75,21 @@ Confirm existing CLI tests still pass (AC-012).
 
 | Order | File | Notes |
 |------:|------|--------|
-| 1 | `evidence.py` | Shared evidence + evidence type enum (or shared enums module if preferred) |
-| 2 | `project.py` | `ProjectInfo` |
-| 3 | `repository.py` | `RepositoryInfo` |
-| 4 | `module.py` | includes `depends_on` |
-| 5 | `technology.py` | optional evidence |
-| 6 | `dependency.py` | optional evidence + `declared_by` |
-| 7 | `metadata.py` | `GenerationMetadata` |
-| 8 | `project_context.py` | aggregate |
-| 9 | `__init__.py` | public exports |
-
-Enums may live next to models or in a small `enums.py` if that reduces duplication — prefer minimal structure; do not over-split.
-
----
-
-## Non-goals during implementation
-
-- Do not create `application/`, `infrastructure/`, or `generator/` packages
-- Do not parse real repositories
-- Do not write `.ai-context` files
-- Do not add CLI flags for domain inspection unless TASK-002 is later amended
+| 1 | enums (inline or small module) | four canonical enums only |
+| 2 | `evidence.py` | |
+| 3 | `project.py` | |
+| 4 | `repository.py` | |
+| 5 | `module.py` | `depends_on` |
+| 6 | `technology.py` | `list[Evidence]` |
+| 7 | `dependency.py` | `ecosystem`, `list[Evidence]` |
+| 8 | `metadata.py` | `analysis_status` |
+| 9 | `project_context.py` | `project_dependencies` |
+| 10 | `__init__.py` | |
 
 ---
 
-## Done when
+## Non-goals
 
-- All AC-001–AC-012 can be argued from code + tests
-- Validation checklist in `05-validation-checklist.md` is completed with real command results
-- Session notes updated after implementation
+- No `application/` / `infrastructure/` / `generator/` packages
+- No analyzers, no `.ai-context` writes, no new CLI
+- No `DependencyGraph`, no `Module.dependencies`, no `DependencyEcosystem` enum

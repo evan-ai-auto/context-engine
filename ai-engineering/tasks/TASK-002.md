@@ -2,30 +2,35 @@
 
 ## Status
 
-READY_FOR_IMPLEMENTATION
+SPECIFICATION_FROZEN
 
-## Architecture decisions locked
+Stage A — Comprehensive Domain Architecture Reconciliation is complete.
 
-The following architecture decisions are locked before implementation:
+The specification is frozen and ready for the **pre-implementation inspection gate**.
 
-- Introduce Pydantic v2 for domain models
-- Closed `str` Enums for taxonomies; open strings for names
-- Shared `Evidence` model with `Optional[Evidence]` on Technology and Dependency
-- Minimal Module/Dependency relationship fix (`Module.depends_on`, `Dependency.declared_by`; defer `DependencyGraph`)
+- Do **not** mark TASK-002 as DONE
+- Do **not** treat implementation as complete
+- Implementation of `src/ai_context/domain/` has **not** started
 
-Review:
+## Canonical sources
 
-[`ai-engineering/reviews/TASK-002-architecture-decision-review.md`](../reviews/TASK-002-architecture-decision-review.md)
+| Kind | Path |
+|------|------|
+| Architecture decisions | [`sessions/TASK-002/architecture-decisions.md`](../sessions/TASK-002/architecture-decisions.md) |
+| Domain contract | [`sessions/TASK-002/03-domain-model-contract.md`](../sessions/TASK-002/03-domain-model-contract.md) |
+| Session pack | [`sessions/TASK-002/`](../sessions/TASK-002/) |
+| Stage A task | [`TASK-002 Stage A — Comprehensive Domain Architecture Reconciliation.md`](./TASK-002%20Stage%20A%20—%20Comprehensive%20Domain%20Architecture%20Reconciliation.md) |
+| Decision review | [`reviews/TASK-002-architecture-decision-review.md`](../reviews/TASK-002-architecture-decision-review.md) |
 
-Session decisions:
+`sessions/TASK-002/decisions.md` has been deleted and is not a source of truth.
 
-[`ai-engineering/sessions/TASK-002/architecture-decisions.md`](../sessions/TASK-002/architecture-decisions.md)
+## Frozen architecture decisions (summary)
 
-Session pack:
-
-[`ai-engineering/sessions/TASK-002/`](../sessions/TASK-002/)
-
-Implementation of `src/ai_context/domain/` has not started.
+- ADR-001 — Pydantic v2 (add at implementation after Python compatibility check)
+- ADR-002 — Enums: `ModuleType`, `DependencyScope`, `EvidenceType`, `AnalysisStatus`; ecosystem is `str`
+- ADR-003 — `list[Evidence]` on Technology and Dependency (`source_file`, `source_type`, `detail`)
+- ADR-004 — `Module.depends_on` vs `ProjectContext.project_dependencies`; `Dependency.ecosystem`; optional `declared_by`; no `DependencyGraph`
+- ADR-005 — `GenerationMetadata.analysis_status: AnalysisStatus` for partial context
 
 ---
 
@@ -116,6 +121,9 @@ The following capabilities must NOT be implemented in TASK-002:
 - CLI commands
 - incremental updates
 - semantic analysis
+- `DependencyGraph`
+- `Module.dependencies`
+- `DependencyEcosystem` enum
 
 TASK-002 defines the data model only.
 
@@ -123,23 +131,29 @@ TASK-002 defines the data model only.
 
 # 5. Core Domain Model
 
-The top-level domain object is:
+Canonical aggregate (frozen):
 
 ```text
 ProjectContext
 │
-├── project
+├── project: ProjectInfo
 │
-├── repository
+├── repository: RepositoryInfo
 │
-├── modules[]
+├── modules: list[Module]
 │
-├── technologies[]
+├── technologies: list[Technology]
 │
-├── dependencies[]
+├── project_dependencies: list[Dependency]
 │
-└── metadata
+└── metadata: GenerationMetadata
 ```
+
+There is no `dependencies` field on `ProjectContext`. External package/library dependencies are owned solely by `project_dependencies`.
+
+Full field-level contract:
+
+[`sessions/TASK-002/03-domain-model-contract.md`](../sessions/TASK-002/03-domain-model-contract.md)
 
 ---
 
@@ -147,176 +161,115 @@ ProjectContext
 
 ## 6.1 ProjectContext
 
-Represents the complete structured context of a software repository.
-
 Fields:
 
 - project
 - repository
 - modules
 - technologies
-- dependencies
+- project_dependencies
 - metadata
 
 ---
 
 ## 6.2 ProjectInfo
 
-Represents the logical project.
-
-Fields:
+Required:
 
 - name
-- type
+
+Optional:
+
 - description
 - primary_language
 
-Example:
-
-```json
-{
-  "name": "context-engine",
-  "type": "application",
-  "description": "AI project context generation engine",
-  "primary_language": "python"
-}
-```
+`ProjectInfo.type` is not part of the frozen contract.
 
 ---
 
 ## 6.3 RepositoryInfo
 
-Represents repository-level metadata.
+Required:
 
-Fields:
-
-- root_path
+- root_path (portable; must not require machine-specific absolute paths)
 - is_git_repository
+
+Optional:
+
 - branch
 - commit
-
-Rules:
-
-- root_path must be portable
-- machine-specific absolute paths should not be required
-- branch and commit may be optional
 
 ---
 
 ## 6.4 Module
 
-Represents a logical project module.
-
-Fields:
+Required:
 
 - name
 - path
-- type
+- type (`ModuleType`)
+- depends_on (`list[str]`, default empty) — internal module relationships
+
+Optional:
+
 - language
 - build_tool
 
-Example:
-
-```json
-{
-  "name": "user-service",
-  "path": "services/user-service",
-  "type": "service",
-  "language": "java",
-  "build_tool": "maven"
-}
-```
+Do not add `Module.dependencies`.
 
 ---
 
 ## 6.5 Technology
 
-Represents a detected technology.
-
-Fields:
+Required:
 
 - name
-- category
+- evidence (`list[Evidence]`, default empty)
+
+Optional:
+
+- category (`str`, not enum)
 - version
-- evidence
-
-Suggested categories:
-
-- framework
-- database
-- messaging
-- cache
-- build-tool
-- runtime
-- cloud
-- library
-
-Example:
-
-```json
-{
-  "name": "Spring Boot",
-  "category": "framework",
-  "version": "2.7.18"
-}
-```
 
 ---
 
 ## 6.6 Dependency
 
-Represents a concrete dependency.
-
-Fields:
+Required:
 
 - name
+- ecosystem (`str`, not enum) — e.g. Maven, PyPI, npm
+- evidence (`list[Evidence]`, default empty)
+
+Optional:
+
 - version
-- scope
-- evidence
-
-Example:
-
-```json
-{
-  "name": "spring-boot-starter-web",
-  "version": "2.7.18",
-  "scope": "compile"
-}
-```
+- scope (`DependencyScope`)
+- declared_by
 
 ---
 
 ## 6.7 GenerationMetadata
 
-Represents context generation metadata.
-
-Fields:
+Required:
 
 - engine_version
 - schema_version
 - generated_at
+- analysis_status (`AnalysisStatus`: pending | partial | completed | failed)
 
 ---
 
 ## 6.8 Evidence
 
-Represents evidence supporting analysis results.
+Required:
 
-Fields:
+- source_file
+- source_type (`EvidenceType`)
 
-- file
-- type
+Optional:
 
-Example:
-
-```json
-{
-  "file": "pom.xml",
-  "type": "build-file"
-}
-```
-
-Evidence should allow future analyzers to explain the source of detected information.
+- detail
 
 ---
 
@@ -326,22 +279,16 @@ Evidence should allow future analyzers to explain the source of detected informa
 ProjectContext
 │
 ├── ProjectInfo
-│
 ├── RepositoryInfo
-│
-├── List[Module]
-│
-├── List[Technology]
-│
-├── List[Dependency]
-│
+├── list[Module]
+├── list[Technology]
+├── list[Dependency] as project_dependencies
 └── GenerationMetadata
 
-Technology
-└── Evidence
-
-Dependency
-└── Evidence
+Technology.evidence -> list[Evidence]
+Dependency.evidence -> list[Evidence]
+Module.depends_on -> module names
+Dependency.declared_by -> optional module name
 ```
 
 ---
@@ -358,37 +305,13 @@ Technology-specific behavior belongs to future analyzers.
 
 ## 8.2 Serializable
 
-All domain models must support:
-
-```text
-Model
- ↓
-Dictionary
- ↓
-JSON
-```
-
-And:
-
-```text
-JSON
- ↓
-Model Validation
- ↓
-Domain Model
-```
+All domain models must support model ↔ dict/JSON round-trip with validation.
 
 ---
 
 ## 8.3 Validated
 
-Invalid structured data should be rejected.
-
-Examples:
-
-- invalid enum values
-- invalid required fields
-- invalid model structure
+Invalid enum values, missing required fields, and invalid structure must be rejected.
 
 ---
 
@@ -400,15 +323,11 @@ Equivalent model data should produce semantically consistent serialized output.
 
 ## 8.5 Extensible
 
-Future capabilities should be able to extend the model without requiring major redesign.
-
-However, future capabilities must not be implemented prematurely.
+Future capabilities may extend the model later, but must not be implemented prematurely in TASK-002.
 
 ---
 
 # 9. Package Structure
-
-Recommended structure:
 
 ```text
 src/
@@ -446,14 +365,12 @@ tests/
 
 The implementation should:
 
+- use Pydantic v2 after verifying Python compatibility
 - use explicit types
 - avoid `dict[str, Any]` as the primary domain representation
-- use explicit domain models
-- support validation
-- support serialization
-- support deserialization
-- avoid analyzer dependencies
-- avoid filesystem dependencies
+- support validation, serialization, and deserialization
+- avoid analyzer and filesystem dependencies
+- follow the frozen contract without silent redesign
 
 Dependency direction:
 
@@ -466,8 +383,6 @@ Domain Model
         ▼
 Generator
 ```
-
-The Domain Model must not depend on Scanner or Analyzer implementations.
 
 ---
 
@@ -491,7 +406,7 @@ Serialized data can be deserialized back into valid domain models.
 
 ## AC-005
 
-Invalid enum values are rejected.
+Invalid enum values are rejected (`ModuleType`, `DependencyScope`, `EvidenceType`, `AnalysisStatus`).
 
 ## AC-006
 
@@ -503,7 +418,7 @@ Optional fields are correctly supported.
 
 ## AC-008
 
-Technology and Dependency can include source evidence.
+Technology and Dependency support multiple `Evidence` records.
 
 ## AC-009
 
@@ -515,7 +430,7 @@ Domain models do not require machine-specific absolute paths.
 
 ## AC-011
 
-Unit tests cover valid and invalid model scenarios.
+Unit tests cover valid and invalid model scenarios, including ecosystem, `project_dependencies`, `depends_on`, and partial `analysis_status`.
 
 ## AC-012
 
@@ -529,15 +444,19 @@ Validation should include:
 
 ```bash
 pytest
+ruff check .
+mypy src
 ```
 
 Additionally verify:
 
-- serialization
-- deserialization
+- serialization / deserialization
 - invalid data rejection
 - enum validation
 - optional field behavior
+- multiple evidence
+- `project_dependencies` ownership
+- partial context status
 - domain model imports
 
 Do not claim validation steps were executed unless they were actually executed.
@@ -548,22 +467,18 @@ Do not claim validation steps were executed unless they were actually executed.
 
 Do not:
 
-- implement repository scanning
-- implement project detection
-- implement Java analysis
-- implement Python analysis
+- implement repository scanning or analyzers
 - generate `.ai-context`
 - add CLI commands
 - introduce unrelated refactoring
-- add speculative domain entities without clear need
-
-Keep the implementation focused on the canonical Project Context data contract.
+- add speculative domain entities beyond the frozen contract
+- restore dual ADR sources (`decisions.md`)
 
 ---
 
 # 14. Expected Result
 
-After TASK-002:
+After TASK-002 implementation:
 
 ```text
 Repository Analyzer

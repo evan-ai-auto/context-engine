@@ -2,31 +2,36 @@
 
 ## Strategy
 
-Unit-test the domain package only. Prefer pure construction and validation tests. No filesystem fixtures of real repositories.
+Unit-test the domain package only. No repository filesystem fixtures.
 
 Framework: **pytest**  
-Models: **Pydantic v2** (per locked decision)  
-Location: `tests/domain/` (as in TASK-002) or `tests/unit/domain/` if matching existing layout — prefer TASK-002 recommended `tests/domain/` unless a hygiene revision standardizes otherwise.
+Models: **Pydantic v2**  
+Location: `tests/domain/` as specified in TASK-002
+
+Do not write tests in Stage A — this document is the specification only.
 
 ---
 
-## Test matrix
+## Required coverage
 
 | ID | Area | Scenario | Expect |
 |----|------|----------|--------|
-| T-01 | ProjectContext | Create with valid nested data | succeeds (AC-001) |
-| T-02 | Entities | Each core entity constructible | succeeds (AC-002) |
-| T-03 | Serialization | `model_dump` produces JSON-friendly dict | succeeds (AC-003) |
-| T-04 | Round-trip | dump → JSON → validate | equal semantic fields (AC-004) |
-| T-05 | Enums | Invalid taxonomy value | ValidationError (AC-005) |
-| T-06 | Required | Omit required field | ValidationError (AC-006) |
-| T-07 | Optional | Omit optional version/evidence/branch/commit | succeeds (AC-007) |
-| T-08 | Evidence | Technology/Dependency with Evidence | succeeds (AC-008) |
-| T-09 | Isolation | Domain imports | no scanner/cli/infra imports (AC-009) |
-| T-10 | Paths | Relative / portable root_path | accepted (AC-010) |
-| T-11 | Module deps | `depends_on` list of module names | succeeds |
-| T-12 | Declared_by | Dependency.declared_by optional | succeeds when set/omitted |
-| T-13 | Regression | Existing CLI tests | still pass (AC-012) |
+| T-01 | ProjectContext | Construct with valid nested data | succeeds |
+| T-02 | Required fields | Omit a required field | ValidationError |
+| T-03 | Optional fields | Omit optional description/language/version/scope/etc. | succeeds |
+| T-04 | ModuleType | Valid / invalid enum values | accept / reject |
+| T-05 | DependencyScope | Valid / invalid when present | accept / reject |
+| T-06 | EvidenceType | Valid / invalid | accept / reject |
+| T-07 | AnalysisStatus | `pending` / `partial` / `completed` / `failed` + invalid | accept / reject |
+| T-08 | Multiple Evidence | Two+ evidence records on Technology and Dependency | succeeds |
+| T-09 | Ecosystem | Required `Dependency.ecosystem` string; omit → reject | |
+| T-10 | Ownership | External deps only via `project_dependencies` | field present; no `dependencies` |
+| T-11 | Module.depends_on | Internal module name list (incl. default `[]`) | succeeds |
+| T-12 | Partial context | `metadata.analysis_status = partial` with sparse modules/deps | succeeds |
+| T-13 | Serialization | `model_dump` JSON-friendly | succeeds |
+| T-14 | Deserialization | dump → JSON → `model_validate` | semantic round-trip |
+| T-15 | Invalid model | Bad structure / bad enum / missing required | ValidationError |
+| T-16 | Regression | Existing CLI tests | still pass |
 
 ---
 
@@ -46,16 +51,9 @@ tests/domain/
 
 ---
 
-## Coverage notes
-
-- At least one invalid enum case per taxonomy enum used in public models
-- At least one missing-required-field case on aggregate and one leaf entity
-- Explicit tests for `Module.depends_on` default empty list behavior
-- Explicit tests that Evidence is optional on Technology and Dependency
-
 ## Out of test scope for TASK-002
 
-- Parsing `pom.xml` / `pyproject.toml`
+- Parsing build files
 - Writing `.ai-context`
-- CLI `init` behavior beyond existing regression suite
-- Golden file tests for full repository fixtures
+- Analyzer behavior
+- Golden repository fixtures

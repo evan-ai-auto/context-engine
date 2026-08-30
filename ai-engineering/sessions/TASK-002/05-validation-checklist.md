@@ -1,55 +1,53 @@
 # 05 — TASK-002 Validation Checklist
 
-Complete only with **actually executed** results. Do not mark pass from intention alone.
+Complete only with **actually executed** results after implementation. Stage A does not execute product validation commands.
 
 ---
 
-## Preconditions
+## Specification freeze (Stage A)
 
-- [ ] Architecture decisions remain locked
-- [ ] Implementation matches [`03-domain-model-contract.md`](./03-domain-model-contract.md)
+- [x] Canonical ADRs in `architecture-decisions.md`
+- [x] Canonical contract in `03-domain-model-contract.md`
+- [x] `decisions.md` deleted
+- [x] `project_dependencies` naming reconciled
+- [x] Multiple evidence + ecosystem + analysis_status documented
+
+---
+
+## Preconditions (implementation)
+
+- [ ] Architecture remains frozen (no silent redesign)
+- [ ] Implementation matches `03-domain-model-contract.md`
 - [ ] No scanner / analyzer / generator / new CLI features added
+- [ ] Python/Pydantic compatibility verified before `pyproject.toml` change
 
 ---
 
-## Structure
+## Domain contract consistency
 
-- [ ] `src/ai_context/domain/` exists with core entity modules
-- [ ] `Module.depends_on` present
-- [ ] `Dependency.declared_by` present (optional field)
-- [ ] Shared `Evidence` used by Technology and Dependency
-- [ ] Pydantic v2 declared in `pyproject.toml` (3.8-compatible pin)
-
----
-
-## Acceptance criteria
-
-- [ ] AC-001 ProjectContext creates with valid data
-- [ ] AC-002 All core entities explicitly modeled
-- [ ] AC-003 Serialization supported
-- [ ] AC-004 Deserialization round-trip works
-- [ ] AC-005 Invalid enums rejected
-- [ ] AC-006 Required fields validated
-- [ ] AC-007 Optional fields supported
-- [ ] AC-008 Evidence attachable on Technology/Dependency
-- [ ] AC-009 No scanner dependency in domain
-- [ ] AC-010 No machine-specific absolute path requirement
-- [ ] AC-011 Unit tests cover valid and invalid cases
-- [ ] AC-012 Existing tests still pass
+- [ ] Aggregate uses `project_dependencies` (not `dependencies`)
+- [ ] Required vs optional fields match contract
+- [ ] Enums limited to ModuleType, DependencyScope, EvidenceType, AnalysisStatus
+- [ ] `Dependency.ecosystem` is required `str` (not enum)
+- [ ] `Technology.evidence` and `Dependency.evidence` are `list[Evidence]`
+- [ ] Evidence fields: `source_file`, `source_type`, `detail`
+- [ ] `Module.depends_on` present; no `Module.dependencies`
+- [ ] `GenerationMetadata.analysis_status` present
+- [ ] Public package API exports core models from `domain`
 
 ---
 
-## Commands
+## Behavioral checks
 
-Record version/output summaries when run:
+- [ ] Multiple evidence records supported
+- [ ] Partial context via `analysis_status=partial` supported
+- [ ] Serialization round-trip works
+- [ ] Invalid enums / missing required fields fail validation
+- [ ] Existing tests still pass
 
-```bash
-python --version
-pip install -e ".[dev]"
-pytest
-ruff check .
-mypy src
-```
+---
+
+## Commands (post-implementation)
 
 | Command | Result | Notes |
 |---------|--------|-------|
@@ -65,7 +63,8 @@ mypy src
 
 | Role | Name / Agent | Date | Outcome |
 |------|--------------|------|---------|
+| Stage A reconciler | | | SPECIFICATION_FROZEN |
 | Implementer | | | |
 | Reviewer | | | |
 
-Status after validation: _NOT STARTED_
+Status: **SPECIFICATION_FROZEN** (implementation not started)

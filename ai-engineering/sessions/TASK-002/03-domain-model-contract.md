@@ -1,6 +1,10 @@
 # 03 — Domain Model Contract
 
-Locked data contract for TASK-002. Implementation must match this contract and [`architecture-decisions.md`](./architecture-decisions.md).
+**Canonical domain contract for TASK-002.** Frozen after Stage A.
+
+Implementation must match this document and [`architecture-decisions.md`](./architecture-decisions.md).
+
+Do not invent fields, rename ownership, or change required/optional semantics during implementation without a new architecture decision.
 
 ---
 
@@ -10,11 +14,30 @@ Locked data contract for TASK-002. Implementation must match this contract and [
 ProjectContext
 ├── project: ProjectInfo
 ├── repository: RepositoryInfo
-├── modules: List[Module]
-├── technologies: List[Technology]
-├── dependencies: List[Dependency]   # package/library dependencies
+├── modules: list[Module]
+├── technologies: list[Technology]
+├── project_dependencies: list[Dependency]   # sole owner of external package/library deps
 └── metadata: GenerationMetadata
 ```
+
+There is no `ProjectContext.dependencies` field.
+
+---
+
+## Canonical enums
+
+| Enum | Values (canonical) |
+|------|--------------------|
+| `ModuleType` | Implementation chooses explicit members consistent with known module kinds (e.g. application, library, service, unknown). Members must be stable string enums. |
+| `DependencyScope` | Explicit scope members as needed (e.g. compile, runtime, test, optional, unknown). |
+| `EvidenceType` | Explicit evidence kinds (e.g. build_file, lock_file, manifest, source, config, other). |
+| `AnalysisStatus` | `pending`, `partial`, `completed`, `failed` |
+
+Not enums:
+
+- `Dependency.ecosystem` → `str`
+- technology `category` → optional `str`
+- names, versions, paths, languages, build tools → `str`
 
 ---
 
@@ -24,92 +47,99 @@ ProjectContext
 
 | Field | Type | Required | Notes |
 |-------|------|----------|--------|
-| name | `str` | yes | open string |
-| type | enum | yes | closed taxonomy |
-| description | `str` | yes* | follow TASK-002; keep required unless tests prove optional needed |
-| primary_language | `str` | yes | open string (not enum) |
+| name | `str` | **required** | open string |
+| description | `str` | **optional** | |
+| primary_language | `str` | **optional** | open string; not an enum |
+
+`ProjectInfo.type` is **not** part of the frozen contract.
 
 ### RepositoryInfo
 
 | Field | Type | Required | Notes |
 |-------|------|----------|--------|
-| root_path | `str` | yes | portable path; no machine-specific absolute path requirement |
-| is_git_repository | `bool` | yes | |
-| branch | `str` | no | optional |
-| commit | `str` | no | optional |
+| root_path | `str` | **required** | portable path; must not require machine-specific absolute paths |
+| is_git_repository | `bool` | **required** | |
+| branch | `str` | **optional** | |
+| commit | `str` | **optional** | |
+
+Do not add unnecessary repository metadata in TASK-002.
 
 ### Module
 
 | Field | Type | Required | Notes |
 |-------|------|----------|--------|
-| name | `str` | yes | |
-| path | `str` | yes | portable relative path preferred |
-| type | enum | yes | closed taxonomy |
-| language | `str` | yes | open string |
-| build_tool | `str` | yes | open string |
-| depends_on | `List[str]` | yes (default `[]`) | **internal module names**; locked decision |
+| name | `str` | **required** | |
+| path | `str` | **required** | portable relative path preferred |
+| type | `ModuleType` | **required** | closed enum |
+| language | `str` | **optional** | |
+| build_tool | `str` | **optional** | |
+| depends_on | `list[str]` | **required** (default `[]`) | internal module names only |
+
+Do **not** add `Module.dependencies`.
 
 ### Technology
 
 | Field | Type | Required | Notes |
 |-------|------|----------|--------|
-| name | `str` | yes | open string |
-| category | enum | yes | closed taxonomy |
-| version | `str` | no | optional |
-| evidence | `Optional[Evidence]` | no | shared Evidence model |
-
-Suggested category values (enum members; exact names may use snake_case or hyphen mapping — pick one style and test it):
-
-- framework, database, messaging, cache, build-tool, runtime, cloud, library
+| name | `str` | **required** | |
+| category | `str` | **optional** | open string, not enum |
+| version | `str` | **optional** | |
+| evidence | `list[Evidence]` | **required** (default `[]`) | zero or more records |
 
 ### Dependency
 
 | Field | Type | Required | Notes |
 |-------|------|----------|--------|
-| name | `str` | yes | package/library coordinate or name |
-| version | `str` | no | optional |
-| scope | enum | yes | closed taxonomy |
-| evidence | `Optional[Evidence]` | no | shared Evidence model |
-| declared_by | `Optional[str]` | no | module name that declared it; locked decision |
-
-### GenerationMetadata
-
-| Field | Type | Required | Notes |
-|-------|------|----------|--------|
-| engine_version | `str` | yes | |
-| schema_version | `str` | yes | |
-| generated_at | datetime or ISO `str` | yes | prefer timezone-aware UTC if using datetime |
+| name | `str` | **required** | package/library name or coordinate |
+| ecosystem | `str` | **required** | e.g. Maven, PyPI, npm — **not** an enum |
+| version | `str` | **optional** | |
+| scope | `DependencyScope` | **optional** | closed enum when present |
+| declared_by | `str` | **optional** | declaring module name |
+| evidence | `list[Evidence]` | **required** (default `[]`) | zero or more records |
 
 ### Evidence
 
 | Field | Type | Required | Notes |
 |-------|------|----------|--------|
-| file | `str` | yes | evidence path/name (e.g. `pom.xml`) |
-| type | enum | yes | closed taxonomy (e.g. build-file) |
+| source_file | `str` | **required** | e.g. `pom.xml` |
+| source_type | `EvidenceType` | **required** | closed enum |
+| detail | `str` | **optional** | free-form detail |
+
+### GenerationMetadata
+
+| Field | Type | Required | Notes |
+|-------|------|----------|--------|
+| engine_version | `str` | **required** | |
+| schema_version | `str` | **required** | |
+| generated_at | datetime or ISO `str` | **required** | prefer timezone-aware UTC if using datetime |
+| analysis_status | `AnalysisStatus` | **required** | whole-context completeness |
 
 ---
 
-## Relationships (v0.1)
+## Relationships
 
 ```text
-Technology ──optional──► Evidence
-Dependency ──optional──► Evidence
+Technology.evidence[] ──► Evidence
+Dependency.evidence[] ──► Evidence
 Module.depends_on[] ──► other Module.name (by string)
 Dependency.declared_by ──► Module.name (optional string)
+ProjectContext.project_dependencies[] ──► Dependency  (sole external-dep owner)
 ```
 
-**Deferred:** first-class `DependencyGraph` / `dependencies.json` graph root.
+**Deferred:** first-class `DependencyGraph` / graph root for `dependencies.json`.
 
 ---
 
 ## Validation rules
 
-1. Invalid taxonomy enum values → rejection (AC-005)
-2. Missing required fields → rejection (AC-006)
-3. Optional fields may be omitted / `None` (AC-007)
-4. No dependency on scanners or filesystem I/O inside domain models (AC-009)
-5. Models must not require absolute machine paths (AC-010)
-6. Prefer Pydantic v2 `model_dump` / `model_validate` for JSON round-trip (AC-003, AC-004)
+1. Invalid `ModuleType`, `DependencyScope`, `EvidenceType`, or `AnalysisStatus` values → rejection
+2. Missing required fields → rejection
+3. Optional fields may be omitted / `None`
+4. Empty evidence lists are valid
+5. Multiple evidence records on one Technology or Dependency are valid
+6. Domain models must not import scanners, filesystem traversal, or CLI packages
+7. Models must not require machine-specific absolute paths
+8. JSON round-trip via Pydantic v2 `model_dump` / `model_validate`
 
 ---
 
@@ -125,14 +155,17 @@ dict / JSON
 Domain model
 ```
 
-Equivalent semantic content should round-trip consistently for the fields defined above.
-
 ---
 
 ## Non-contract (do not invent in TASK-002)
 
 - Analyzer result types
-- CLI DTOs separate from domain
-- Graph export schema for `.ai-context/dependencies.json`
-- Multi-evidence lists (`List[Evidence]`)
+- CLI-only DTOs
+- `DependencyGraph` entity
+- `Module.dependencies`
+- `ProjectContext.dependencies` (removed / renamed)
+- `DependencyEcosystem` enum
+- Per-module or per-analyzer status models
 - Evidence on Module / ProjectInfo
+- `ProjectInfo.type` enum/field
+- `Technology.category` as enum

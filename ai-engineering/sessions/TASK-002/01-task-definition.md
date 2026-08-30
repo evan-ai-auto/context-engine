@@ -2,73 +2,59 @@
 
 ## Status
 
-READY_FOR_IMPLEMENTATION
+SPECIFICATION_FROZEN — awaiting pre-implementation inspection gate
+
+Stage A (Comprehensive Domain Architecture Reconciliation) is complete.
+
+Implementation of `src/ai_context/domain/` has **not** started.
+
+---
 
 ## Source of truth
 
-Primary task document:
+| Kind | Path |
+|------|------|
+| Task | [`ai-engineering/tasks/TASK-002.md`](../../tasks/TASK-002.md) |
+| Canonical ADRs | [`architecture-decisions.md`](./architecture-decisions.md) |
+| Canonical domain contract | [`03-domain-model-contract.md`](./03-domain-model-contract.md) |
+| Stage A brief | [`TASK-002 Stage A — Comprehensive Domain Architecture Reconciliation.md`](../../tasks/TASK-002%20Stage%20A%20—%20Comprehensive%20Domain%20Architecture%20Reconciliation.md) |
 
-[`ai-engineering/tasks/TASK-002.md`](../../tasks/TASK-002.md)
-
-Architecture decision review:
-
-[`ai-engineering/reviews/TASK-002-architecture-decision-review.md`](../../reviews/TASK-002-architecture-decision-review.md)
-
-Session decisions:
-
-[`architecture-decisions.md`](./architecture-decisions.md)
+`decisions.md` is deleted and must not be referenced as a source.
 
 ---
 
 ## Objective
 
-Establish the core **Project Context** domain model for AI Context Engine.
-
-The domain model is the language-agnostic, serializable, validated data contract that future analyzers and generators will populate and consume.
-
-```text
-Repository Analyzer
-        │
-        ▼
-ProjectContext  ← TASK-002 delivers this contract
-        │
-        ▼
-Context Generator
-```
+Establish the core **Project Context** domain model for AI Context Engine: a language-agnostic, serializable, validated data contract for future analyzers and generators.
 
 ---
 
 ## In scope
 
-- Core project context model and related entities
-- Validation rules
-- Serialization / deserialization
-- Unit tests for valid and invalid scenarios
+- Core project context model and related entities (frozen contract)
+- Validation, serialization, deserialization
+- Unit tests
 - Package layout under `src/ai_context/domain/`
 
 ## Out of scope
 
-- Repository scanning / filesystem traversal
-- Java / Python / Maven / Gradle / pyproject detection or parsing
-- Technology or dependency analysis logic
-- `.ai-context` generation
+- Repository scanning / analyzers / `.ai-context` generation
 - New CLI commands
-- Incremental updates / semantic analysis
-- Speculative entities beyond the locked contract
+- `DependencyGraph`
+- Speculative entities beyond the frozen contract
 
 ---
 
-## Locked architecture decisions (summary)
+## Frozen architecture (summary)
 
-1. Introduce **Pydantic v2** for domain models
-2. Closed `str` Enums for taxonomies; open strings for names/versions/paths
-3. Shared **Evidence** with `Optional[Evidence]` on Technology and Dependency
-4. Minimal Module/Dependency relationship fix:
-   - `Module.depends_on: List[str]`
-   - `Dependency.declared_by` optional
-   - Defer `DependencyGraph`
+1. **ADR-001** Pydantic v2 (add dependency only at implementation; verify Python compatibility first)
+2. **ADR-002** Enums: `ModuleType`, `DependencyScope`, `EvidenceType`, `AnalysisStatus` only; ecosystem is `str`
+3. **ADR-003** `list[Evidence]` on Technology and Dependency; fields `source_file`, `source_type`, `detail`
+4. **ADR-004** `Module.depends_on` vs `ProjectContext.project_dependencies`; `Dependency.ecosystem`; optional `declared_by`; no graph
+5. **ADR-005** `GenerationMetadata.analysis_status: AnalysisStatus` for partial context
 
-Details: [`architecture-decisions.md`](./architecture-decisions.md)
+Details: [`architecture-decisions.md`](./architecture-decisions.md)  
+Contract: [`03-domain-model-contract.md`](./03-domain-model-contract.md)
 
 ---
 
@@ -87,18 +73,10 @@ src/ai_context/domain/
 └── evidence.py
 ```
 
-Implementation of `src/ai_context/domain/` has **not** started at the time this session folder was created.
-
 ---
 
-## Acceptance criteria (reference)
+## Next gate
 
-AC-001 … AC-012 as defined in `TASK-002.md` §11.
+Pre-implementation inspection, then implementation using [`06-cursor-prompt.md`](./06-cursor-prompt.md).
 
-Validation commands (must be actually executed before claiming pass):
-
-```bash
-pytest
-ruff check .
-mypy src
-```
+Do not mark TASK-002 DONE until the full engineering lifecycle completes after implementation.

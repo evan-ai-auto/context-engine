@@ -1,111 +1,159 @@
 # TASK-002 Architecture Decisions
 
-Architecture decisions for the core Project Context domain model.
+**Canonical architecture decision document for TASK-002.**
 
-Source review:
+Do not maintain a parallel `decisions.md`.
+
+Status: **FROZEN** after Stage A — Comprehensive Domain Architecture Reconciliation.
+
+Implementation must not invent new architecture decisions. If a conflict with this document is discovered during implementation, stop and report it.
+
+Related review (historical + Stage A alignment):
 
 [`ai-engineering/reviews/TASK-002-architecture-decision-review.md`](../../reviews/TASK-002-architecture-decision-review.md)
 
-Also mirrored historically at:
+Canonical domain contract:
 
-[`decisions.md`](./decisions.md)
-
-Status: **locked** (implementation not started at session bootstrap).
+[`03-domain-model-contract.md`](./03-domain-model-contract.md)
 
 ---
 
-### Decision: Introduce Pydantic v2
+## ADR-001 — Pydantic v2
 
-#### Context
+### Context
 
-TASK-002 requires validated, serializable domain models (AC-003–AC-007) without using `dict[str, Any]` as the primary representation.
+TASK-002 requires validated, serializable domain models without using `dict[str, Any]` as the primary representation.
 
-#### Decision
+### Decision
 
-Add Pydantic v2 as the domain modeling library.
+Use **Pydantic v2** as the domain modeling foundation.
 
-#### Reason
+Do **not** add Pydantic to `pyproject.toml` during Stage A.
 
-Typed models, JSON round-trip, and enum/required-field validation on Python 3.8+ with less custom infrastructure than dataclasses-only or a hand-rolled validator.
+### Implementation note
 
-#### Trade-off
+Before modifying `pyproject.toml`, implementation must verify the repository Python compatibility policy and select a Pydantic 2.x constraint compatible with that policy.
 
-New runtime dependency; must pin a 3.8-compatible Pydantic 2.x line.
+Because this is a new project, implementation planning may recommend raising the minimum supported Python version if required by the selected modern dependency and typing strategy.
 
-#### Consequences
+Stage A does **not** freeze a new minimum Python version unless already evidenced by existing repo policy.
+
+### Consequences
 
 Domain entities under `src/ai_context/domain/` will be Pydantic models using `model_dump` / `model_validate`.
 
 ---
 
-### Decision: Closed str Enums for taxonomies; open strings for names
+## ADR-002 — Enum strategy
 
-#### Context
+### Context
 
-AC-005 requires rejecting invalid enum values, while TASK-002 §8.5 requires extensibility for evolving ecosystems.
+Stable taxonomies need hard validation; fast-evolving labels must remain extensible.
 
-#### Decision
+### Decision
 
-Use `class X(str, Enum)` for stable taxonomies (project/module type, technology category, dependency scope, evidence type). Use plain `str` for names, versions, paths, and fast-evolving language/build-tool labels.
+Use explicit string-based enums (`str, Enum`) for the following **canonical** set only:
 
-#### Reason
+| Enum | Purpose |
+|------|---------|
+| `ModuleType` | Module taxonomy |
+| `DependencyScope` | External dependency scope |
+| `EvidenceType` | Evidence source classification |
+| `AnalysisStatus` | Whole-context analysis completeness |
 
-Closed enums give hard validation for taxonomies; open strings avoid freezing every framework or language name into the schema.
+Do **not** introduce a `DependencyEcosystem` enum.
 
-#### Trade-off
+`Dependency.ecosystem` remains a **plain `str`** (e.g. Maven, PyPI, npm, Cargo, Go Modules) so new ecosystems do not require Core Domain Model changes.
 
-New taxonomy values require a schema bump; free-form strings may need later normalization in analyzers.
+Open strings remain for names, versions, paths, languages, build tools, technology category, and similar labels.
 
-#### Consequences
+### Consequences
 
-Tests must cover invalid enum rejection; technology/dependency names remain strings.
-
----
-
-### Decision: Shared Evidence model with Optional attachment
-
-#### Context
-
-Technology and Dependency need a consistent way to record detection sources (AC-008) without duplicating ad-hoc dict shapes.
-
-#### Decision
-
-One shared `Evidence` model (`file`, `type` enum). Attach as `Optional[Evidence]` on Technology and Dependency only for v0.1.
-
-#### Reason
-
-Matches TASK-002 relationships, keeps a single evidence contract, and defers multi-source lists until needed.
-
-#### Trade-off
-
-Module/Project lack evidence in v0.1; multi-source evidence is deferred.
-
-#### Consequences
-
-Analyzers attach at most one primary evidence blob per tech/dep; Evidence performs no I/O.
+Invalid enum members must be rejected by validation tests. Ecosystem strings are free-form and normalized later by analyzers if needed.
 
 ---
 
-### Decision: Minimal Module/Dependency relationship fix
+## ADR-003 — Evidence strategy
 
-#### Context
+### Context
 
-TASK-002’s flat package-like `Dependency` list cannot express v0.1 module→module edges required by the specification and architecture.
+Technology and Dependency detections may be supported by multiple independent sources.
 
-#### Decision
+### Decision
 
-1. Keep `ProjectContext.dependencies` as package/library dependencies, with optional `declared_by`.
-2. Add `Module.depends_on: List[str]` for internal module dependencies.
-3. Defer first-class `DependencyGraph` until generator/analysis needs `dependencies.json`.
+`Evidence` is a reusable domain model with fields:
 
-#### Reason
+| Field | Required | Type |
+|-------|----------|------|
+| `source_file` | yes | `str` |
+| `source_type` | yes | `EvidenceType` |
+| `detail` | no | `str` |
 
-Closes the spec gap without inventing a premature graph root before analyzers exist.
+Attachments:
 
-#### Trade-off
+- `Technology.evidence` → `list[Evidence]` (default empty)
+- `Dependency.evidence` → `list[Evidence]` (default empty)
 
-Graph export is derived later; package vs module deps are separated by field location rather than a single edge model.
+Do **not** use a single `Optional[Evidence]` attachment.
 
-#### Consequences
+Do not attach Evidence to Module or ProjectInfo in TASK-002.
 
-TASK-002 implementation must include `Module.depends_on` and `Dependency.declared_by`, and must not ship the original flat-only relationship as final.
+Evidence performs no I/O.
+
+### Consequences
+
+Analyzers may attach zero or more evidence records per technology/dependency.
+
+---
+
+## ADR-004 — Module and dependency relationships
+
+### Context
+
+Internal module edges and external package/library dependencies must not be conflated.
+
+### Decision
+
+| Concept | Location | Meaning |
+|---------|----------|---------|
+| Internal module→module | `Module.depends_on: list[str]` | Other module names |
+| External package/library | `ProjectContext.project_dependencies: list[Dependency]` | Sole owner of external deps |
+| Declaration origin | `Dependency.declared_by: Optional[str]` | Module that declared the package dep |
+
+Additional:
+
+- `Dependency.ecosystem: str` (required) — package ecosystem identity
+- Do **not** create `DependencyGraph` in TASK-002
+- Do **not** add `Module.dependencies`
+- Do **not** keep `ProjectContext.dependencies` (renamed to `project_dependencies`)
+
+### Consequences
+
+Graph export for `.ai-context` remains a later generator concern derived from these fields.
+
+---
+
+## ADR-005 — Partial context strategy
+
+### Context
+
+Analyzers may produce incomplete context before a full successful run.
+
+### Decision
+
+Add whole-context status only:
+
+`GenerationMetadata.analysis_status: AnalysisStatus`
+
+Canonical values:
+
+- `pending`
+- `partial`
+- `completed`
+- `failed`
+
+Do **not** introduce per-module or per-analyzer status models in TASK-002.
+
+### Consequences
+
+`ProjectContext` can represent partially analyzed repositories without extra status graphs.
