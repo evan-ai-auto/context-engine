@@ -39,7 +39,7 @@ Frozen rules (non-negotiable):
 - ProjectContext.project_dependencies owns external deps (NO ProjectContext.dependencies)
 - Module.depends_on: list[str]; NO Module.dependencies
 - Dependency.declared_by optional
-- GenerationMetadata.generated_at: datetime (timezone-aware UTC preferred); NOT str / datetime|str
+- GenerationMetadata.generated_at: datetime domain type (timezone-aware UTC preferred); NOT datetime|str as domain type; valid ISO 8601 strings OK as JSON/deserialize input and must become typed datetime
 - GenerationMetadata.analysis_status: AnalysisStatus
 - NO DependencyGraph
 

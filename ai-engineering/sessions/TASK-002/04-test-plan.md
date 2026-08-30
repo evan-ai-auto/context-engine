@@ -30,9 +30,9 @@ Frozen enum members (Revision-001) must be used exactly; do not invent extra mem
 | T-10 | Ownership | External deps only via `project_dependencies` | field present; no `dependencies` |
 | T-11 | Module.depends_on | Internal module name list (incl. default `[]`) | succeeds |
 | T-12 | Partial context | `metadata.analysis_status = partial` with sparse modules/deps | succeeds |
-| T-13 | generated_at | `datetime` (tz-aware UTC preferred); reject plain str domain assignment if invalid | succeeds / ValidationError |
-| T-14 | Serialization | `model_dump` JSON-friendly (ISO datetime) | succeeds |
-| T-15 | Deserialization | dump → JSON → `model_validate` | semantic round-trip |
+| T-13 | generated_at | (1) native `datetime` input succeeds; (2) valid ISO 8601 string input parses via Pydantic; (3) resulting field is typed `datetime`; (4) invalid datetime input rejected | succeeds / ValidationError |
+| T-14 | Serialization | `model_dump` JSON-friendly (datetime → ISO) | succeeds |
+| T-15 | Deserialization | dump → JSON → `model_validate` (ISO → `datetime`) | semantic round-trip |
 | T-16 | Invalid model | Bad structure / bad enum / missing required | ValidationError |
 | T-17 | Regression | Existing CLI tests | still pass |
 

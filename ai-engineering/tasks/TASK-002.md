@@ -6,7 +6,7 @@ SPECIFICATION_FROZEN
 
 Stage A — Comprehensive Domain Architecture Reconciliation is complete.
 
-Revision-001 — Domain Contract Finalization is **COMPLETED_PENDING_REVIEW**.
+Revision-001 — Domain Contract Finalization is **APPROVED**.
 
 The specification is frozen and ready for the **Repository Compatibility Inspection** / pre-implementation gate.
 

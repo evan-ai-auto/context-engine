@@ -10,7 +10,7 @@ TASK-002 — Core Project Context Domain Model
 
 ## Status
 
-COMPLETED_PENDING_REVIEW
+APPROVED
 
 ## Trigger
 
@@ -125,6 +125,10 @@ Implementation must not invent additional enum members.
 
 ## Completion Status
 
-COMPLETED_PENDING_REVIEW
+APPROVED
+
+Review feedback on `generated_at` test/serialization semantics applied.
 
 TASK-002 remains **SPECIFICATION_FROZEN** / not DONE. Implementation has not started.
+
+Ready for the Repository Compatibility Inspection gate.

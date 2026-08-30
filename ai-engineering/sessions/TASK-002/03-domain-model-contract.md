@@ -117,7 +117,7 @@ Do **not** add `Module.dependencies`.
 |-------|------|----------|--------|
 | engine_version | `str` | **required** | |
 | schema_version | `str` | **required** | |
-| generated_at | `datetime` | **required** | timezone-aware UTC preferred; **not** `str` / `datetime \| str` |
+| generated_at | `datetime` | **required** | Domain runtime type is `datetime` (timezone-aware UTC preferred). Domain field type is **not** `str` and **not** `datetime \| str`. Valid ISO 8601 strings may appear in JSON / validation input and are deserialized into typed `datetime` by Pydantic. |
 | analysis_status | `AnalysisStatus` | **required** | whole-context completeness |
 
 ---
@@ -152,14 +152,23 @@ ProjectContext.project_dependencies[] ──► Dependency  (sole external-dep o
 ## Serialization contract
 
 ```text
-Domain model
+Domain model (typed fields, including datetime)
     │ model_dump (JSON-friendly)
     ▼
-dict / JSON
+dict / JSON  (datetime values as ISO 8601 strings)
     │ model_validate
     ▼
-Domain model
+Domain model (ISO strings deserialized back to typed datetime)
 ```
+
+Clarifications for `generated_at`:
+
+- **Domain runtime type** remains `datetime` only (not `datetime | str`)
+- **JSON / deserialization input** may contain a valid ISO 8601 datetime string
+- Pydantic v2 parses that string into a typed `datetime` on the domain model
+- Serialization converts `datetime` values into a JSON-compatible representation (typically ISO 8601)
+- Invalid datetime inputs are rejected
+- Do **not** require tests to reject a valid ISO 8601 string merely because the wire/input form is a string
 
 ---
 
@@ -176,4 +185,4 @@ Domain model
 - `ProjectInfo.type` enum/field
 - `Technology.category` as enum
 - Additional members beyond the frozen enum tables
-- `generated_at` as `str` or `datetime | str`
+- `generated_at` as a domain union type `datetime | str` (JSON ISO strings are input/wire forms only)

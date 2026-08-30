@@ -172,8 +172,10 @@ Freeze:
 
 - Typed datetime object in the domain model
 - Prefer timezone-aware UTC timestamps
-- Do **not** allow `datetime | str` or “ISO str” as an alternate domain type
+- Do **not** model the domain field as `datetime | str`
+- Valid ISO 8601 datetime strings are allowed as JSON / `model_validate` input and must deserialize to typed `datetime`
 - ISO 8601 conversion is handled by Pydantic serialization/deserialization
+- Invalid datetime inputs are rejected
 
 Do **not** introduce per-module or per-analyzer status models in TASK-002.
 

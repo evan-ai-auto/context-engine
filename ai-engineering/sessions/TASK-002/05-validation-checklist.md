@@ -13,7 +13,7 @@ Complete only with **actually executed** results after implementation. Specifica
 - [x] Multiple evidence + ecosystem + analysis_status documented
 - [x] Python >= 3.10 frozen in `pyproject.toml` and specs (Revision-001)
 - [x] Enum members frozen for all four enums (Revision-001)
-- [x] `generated_at: datetime` frozen (Revision-001)
+- [x] `generated_at: datetime` frozen (Revision-001); ISO 8601 allowed as JSON/deserialization input
 
 ---
 
@@ -37,7 +37,7 @@ Complete only with **actually executed** results after implementation. Specifica
 - [ ] Evidence fields: `source_file`, `source_type`, `detail`
 - [ ] `Module.depends_on` present; no `Module.dependencies`
 - [ ] `GenerationMetadata.analysis_status` present
-- [ ] `GenerationMetadata.generated_at` is `datetime` (not `str`)
+- [ ] `GenerationMetadata.generated_at` is domain `datetime` (ISO strings OK as deserialization input only)
 - [ ] Public package API exports core models from `domain`
 
 ---
@@ -69,8 +69,8 @@ Complete only with **actually executed** results after implementation. Specifica
 | Role | Name / Agent | Date | Outcome |
 |------|--------------|------|---------|
 | Stage A reconciler | | | SPECIFICATION_FROZEN |
-| Revision-001 | | | COMPLETED_PENDING_REVIEW |
+| Revision-001 | | | APPROVED |
 | Implementer | | | |
 | Reviewer | | | |
 
-Status: **SPECIFICATION_FROZEN** + Revision-001 finalized (implementation not started)
+Status: **SPECIFICATION_FROZEN** + Revision-001 **APPROVED** (implementation not started)
