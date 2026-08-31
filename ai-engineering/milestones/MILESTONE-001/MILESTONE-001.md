@@ -136,6 +136,7 @@ Completed Stages:
 - Stage B — Engineering Pattern Extraction
 - Stage C — Asset Candidate Identification
 - Stage D1 — Candidate Design Framework
+- Stage D1 Revision-001 — AI Engineering Asset Taxonomy (COMPLETED)
 
 Current Stage:
 
