@@ -32,6 +32,15 @@ def _metadata(
     )
 
 
+def _minimal_context() -> ProjectContext:
+    return ProjectContext(
+        project=ProjectInfo(name="demo", primary_language="python"),
+        repository=RepositoryInfo(root_path=".", is_git_repository=True),
+        project_dependencies=[Dependency(name="typer", ecosystem="PyPI")],
+        metadata=_metadata(),
+    )
+
+
 def test_project_context_construction() -> None:
     context = ProjectContext(
         project=ProjectInfo(name="demo"),
@@ -97,17 +106,27 @@ def test_project_context_collection_defaults_independent() -> None:
 
 
 def test_project_context_round_trip() -> None:
-    context = ProjectContext(
-        project=ProjectInfo(name="demo", primary_language="python"),
-        repository=RepositoryInfo(root_path=".", is_git_repository=True),
-        project_dependencies=[Dependency(name="typer", ecosystem="PyPI")],
-        metadata=_metadata(),
-    )
+    context = _minimal_context()
     dumped = context.model_dump(mode="json")
     restored = ProjectContext.model_validate(dumped)
     assert restored.project.name == "demo"
     assert isinstance(restored.metadata.generated_at, datetime)
     assert restored.model_dump_json()
+
+
+def test_project_context_json_mode_serialization() -> None:
+    """T-14: datetime serializes to a JSON-friendly string in mode=json."""
+    context = _minimal_context()
+    dumped = context.model_dump(mode="json")
+    assert isinstance(dumped["metadata"]["generated_at"], str)
+
+
+def test_project_context_json_string_round_trip() -> None:
+    """T-15: true JSON string round-trip via dump_json / validate_json."""
+    context = _minimal_context()
+    json_data = context.model_dump_json()
+    restored = ProjectContext.model_validate_json(json_data)
+    assert restored == context
 
 
 def test_project_context_missing_required_fails() -> None:
