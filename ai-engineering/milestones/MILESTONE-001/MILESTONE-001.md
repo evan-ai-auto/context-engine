@@ -131,14 +131,17 @@ Completed Stages:
 
 - Stage A — Historical Process Inventory
 - Stage B — Engineering Pattern Extraction
+- Stage C — Asset Candidate Identification
 
 Current Stage:
 
-Stage C — Asset Candidate Identification
+Stage D — Candidate Design
 ```
 
-Pattern analysis output:
+Milestone outputs:
 
 ```text
+ai-engineering/milestones/MILESTONE-001/01-process-inventory.md
 ai-engineering/milestones/MILESTONE-001/02-engineering-patterns.md
+ai-engineering/milestones/MILESTONE-001/03-asset-candidates.md
 ```
