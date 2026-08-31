@@ -60,7 +60,7 @@ Patterns marked NEEDS_MORE_EVIDENCE
 | PATTERN-003 | READY_FOR_STAGE_C | Full evaluation |
 | PATTERN-004 | READY_FOR_STAGE_C | Full evaluation |
 | PATTERN-005 | READY_FOR_STAGE_C | Full evaluation |
-| PATTERN-006 | NEEDS_MORE_EVIDENCE | Light evaluation → defer |
+| PATTERN-006 | NEEDS_MORE_EVIDENCE | Light evaluation → Deferred Pattern Opportunity |
 | PATTERN-007 | READY_FOR_STAGE_C | Full evaluation |
 | PATTERN-008 | NEEDS_MORE_EVIDENCE | Light evaluation → merge/reject as independent |
 | PATTERN-009 | NEEDS_MORE_EVIDENCE | Light evaluation → merge into closeout |
@@ -111,6 +111,33 @@ DEFERRED
 REJECTED
 ```
 
+Stage D Readiness semantics:
+
+```text
+READY_FOR_DESIGN
+=
+Eligible for formal Candidate Design in Stage D.
+
+NEEDS_MORE_EVIDENCE
+=
+Not eligible for formal asset design.
+May be observed or analyzed for evidence gaps only.
+
+DO_NOT_DESIGN
+=
+Explicitly excluded from Stage D design.
+```
+
+Additional Stage D Treatment (when applicable):
+
+```text
+OBSERVE_ONLY
+=
+Document open questions, evidence gaps, and future validation needs.
+Do not produce formal Skill / Agent / Workflow specifications
+or implementation-oriented asset instructions.
+```
+
 ---
 
 ## 4. Pattern-to-Candidate Evaluation Matrix
@@ -122,7 +149,7 @@ REJECTED
 | PATTERN-003 | HIGH | HIGH | HIGH | HIGH | HIGH | LOW | LOW | SKILL | → CANDIDATE-002 STRONG |
 | PATTERN-004 | HIGH | HIGH | HIGH | HIGH | HIGH | LOW | LOW | SKILL | → CANDIDATE-004 EMERGING |
 | PATTERN-005 | MEDIUM | MEDIUM | MEDIUM | MEDIUM | MEDIUM | HIGH | MEDIUM | AGENT (via merge) | → CANDIDATE-005 EMERGING |
-| PATTERN-006 | MEDIUM | MEDIUM | MEDIUM | MEDIUM | MEDIUM | HIGH | LOW | AGENT | DEFERRED (no promote) |
+| PATTERN-006 | MEDIUM | MEDIUM | MEDIUM | MEDIUM | MEDIUM | HIGH | LOW | AGENT (hypothetical) | Deferred Pattern Opportunity (not promoted) |
 | PATTERN-007 | MEDIUM | MEDIUM | MEDIUM | HIGH | MEDIUM | MEDIUM | MEDIUM | WORKFLOW (via merge) | → CANDIDATE-005 EMERGING |
 | PATTERN-008 | MEDIUM | MEDIUM | MEDIUM | MEDIUM | MEDIUM | MEDIUM | MEDIUM | NONE | REJECTED as independent; support CANDIDATE-002 |
 | PATTERN-009 | MEDIUM | MEDIUM | MEDIUM | MEDIUM | LOW | MEDIUM | LOW | NONE | REJECTED as independent; support CANDIDATE-003 |
@@ -258,8 +285,9 @@ Clear structure exists, but promoting to STRONG would violate Stage B.
 Decision:
 
 ```text
-DEFERRED — no STRONG/EMERGING candidate created for Stage D design.
+Deferred Pattern Opportunity — no candidate ID created.
 Revisit after another pre-implementation inspection on a future task.
+PATTERN-006 is deferred before candidate promotion.
 ```
 
 ### Split analysis
@@ -355,6 +383,46 @@ Greenfield feature implementation
 Architecture redesign
 Full task closeout orchestration
 Defining initial task out-of-scope lists
+Defining repository-standard tooling procedures
+Implementing / duplicating standard validation-gate execution
+```
+
+### Capability Dependency
+
+```text
+CANDIDATE-001
+Targeted Engineering Revision
+        │
+        │ requests validation when required
+        ▼
+CANDIDATE-002
+Repository Tooling Validation Gate
+```
+
+```text
+Revision Orchestration
+        ↓ requests
+Validation Execution
+```
+
+This is a one-way capability dependency (CANDIDATE-001 → CANDIDATE-002).
+It is not bidirectional ownership. CANDIDATE-002 does not control CANDIDATE-001.
+
+CANDIDATE-001 owns:
+
+```text
+- determining whether validation is required
+- determining revision acceptance criteria
+- consuming validation evidence
+- deciding whether a revision can be considered complete
+```
+
+CANDIDATE-001 does NOT own:
+
+```text
+- defining repository-standard tooling procedures
+- implementing standard validation gates
+- duplicating validation execution logic
 ```
 
 ### Status
@@ -449,6 +517,39 @@ Does Not Handle:
 Authoring project-specific tests
 Product acceptance criteria outside tooling
 Architecture boundary judgment (may be invoked by a higher gate)
+Deciding revision scope
+Performing engineering revisions
+Deciding broader task acceptance
+```
+
+### Capability Dependency Role
+
+```text
+CANDIDATE-002 is the validation-execution capability requested by
+CANDIDATE-001 (and potentially by other orchestrators such as closeout).
+
+Direction remains:
+
+CANDIDATE-001 → CANDIDATE-002
+
+CANDIDATE-002 does not own or control CANDIDATE-001.
+```
+
+CANDIDATE-002 owns:
+
+```text
+- executing repository-standard tooling validation gates
+- applying configured validation procedures
+- producing validation evidence
+- reporting validation results
+```
+
+CANDIDATE-002 does NOT own:
+
+```text
+- deciding revision scope
+- performing engineering revisions
+- deciding broader task acceptance
 ```
 
 ### Status
@@ -510,6 +611,9 @@ Prior validation results
 Task/stage status documents
 
 Deferred-scope statements from task briefs
+
+Boundary Artifact produced by CANDIDATE-004
+(when available; format implementation-neutral)
 ```
 
 ### Expected Outputs
@@ -522,6 +626,8 @@ Closeout document
 Deferred work list
 
 Lessons / learning notes (when friction or closeout requires them)
+
+Boundary compliance assessment (against the Boundary Artifact)
 ```
 
 ### Evaluation
@@ -541,12 +647,40 @@ Orchestration Value: HIGH
 ```text
 Handles:
 Formal completion of a DONE task with records and deferrals.
+Consuming a Boundary Artifact for scope/compliance checks:
+  - whether intended scope was completed
+  - whether unexpected work was introduced
+  - whether completion claims match the defined boundary
 
 Does Not Handle:
 Mid-stage approvals only
 Continuous documentation during implementation
 Standalone learning-skill productization
 Initial task boundary definition (see CANDIDATE-004)
+Redefining task boundaries
+Silently expanding task scope
+Reinterpreting the original boundary as a new planning process
+```
+
+### Lifecycle Artifact Flow
+
+```text
+CANDIDATE-004
+        │
+        │ produces
+        ▼
+Boundary Artifact
+        │
+        │ consumed by
+        ▼
+CANDIDATE-003
+```
+
+```text
+Producer → Consumer
+
+CANDIDATE-004 remains responsible for boundary definition.
+CANDIDATE-003 consumes the artifact; it does not redefine it.
 ```
 
 ### Status
@@ -608,11 +742,14 @@ Known non-goals from prior tasks
 ### Expected Outputs
 
 ```text
-In-scope list
+Boundary Artifact
+(implementation-neutral; may later be represented as a structured
+document, task contract, metadata, checklist, or machine-readable
+artifact — format not chosen here)
 
-Out-of-scope / non-goals list
+In-scope / out-of-scope / non-goals content carried by that artifact
 
-Constraints referenced by later review/closeout
+Constraints referenced by later review/closeout (via CANDIDATE-003)
 ```
 
 ### Evaluation
@@ -631,12 +768,38 @@ Orchestration Value: LOW
 
 ```text
 Handles:
-Writing and maintaining explicit task exclusions.
+Writing and maintaining explicit task exclusions as a Boundary Artifact.
 
 Does Not Handle:
 Full task planning workflows
 Implementation
 Closeout orchestration
+Redefining boundaries during closeout (that is not CANDIDATE-003’s job either —
+closeout only consumes the artifact)
+```
+
+### Lifecycle Artifact Flow
+
+```text
+Task Definition
+        ↓
+CANDIDATE-004
+Task Boundary Definition
+        ↓
+Boundary Artifact
+        ↓
+Task Execution
+        ↓
+CANDIDATE-003
+Task Closeout Lifecycle
+        ↓
+Boundary Compliance Check
+```
+
+```text
+CANDIDATE-004 → Boundary Artifact → CANDIDATE-003
+
+Producer → Consumer
 ```
 
 ### Status
@@ -754,28 +917,60 @@ but only one task sample. Not STRONG.
 NEEDS_MORE_EVIDENCE
 ```
 
-May sketch boundaries in Stage D only if review agrees; prefer waiting for another architecture-heavy task.
+### Stage D Treatment
+
+```text
+OBSERVE_ONLY
+```
+
+Meaning:
+
+```text
+CANDIDATE-005 remains an EMERGING_CANDIDATE (not rejected).
+
+It is not eligible for formal implementation-oriented asset design.
+
+Stage D may document:
+- open design questions
+- evidence gaps
+- future validation requirements
+
+Stage D must NOT produce:
+- a formal Skill specification
+- a formal Agent specification
+- a formal Workflow specification
+- implementation-oriented asset instructions
+
+Candidate exists
+≠
+Candidate is ready for formal design
+```
 
 ---
 
-## Deferred / Rejected (no Stage D design)
+## Deferred Pattern Opportunities / Rejected Independent Assets
 
 ### PATTERN-006 — Repository Compatibility Inspection
 
 ```text
-Status: DEFERRED
-Candidate Type: AGENT (hypothetical only)
+Classification: Deferred Pattern Opportunity
+
+Not a formal Candidate (no CANDIDATE-006)
+
+Hypothetical type if later promoted: AGENT
+
 Stage D Readiness: DO_NOT_DESIGN
 
 Reason:
 Single occurrence; Stage B NEEDS_MORE_EVIDENCE.
-Do not create CANDIDATE ID for design until reused.
+Deferred before candidate promotion.
+Do not create a candidate ID until reused on a future task.
 ```
 
 ### PATTERN-008 — Layered Validation Composition
 
 ```text
-Status: REJECTED as independent asset
+Classification: Rejected Independent Asset Opportunity
 Disposition: supporting note under CANDIDATE-002
 
 Reason:
@@ -785,7 +980,7 @@ Overlaps tooling gate; weak repetition; would cause validation-asset explosion.
 ### PATTERN-009 — Learning Capture After Friction
 
 ```text
-Status: REJECTED as independent asset
+Classification: Rejected Independent Asset Opportunity
 Disposition: internal step under CANDIDATE-003
 
 Reason:
@@ -797,13 +992,15 @@ avoid Learning Skill fragmentation.
 
 ## 7. Candidate Consolidation
 
-| Candidate | Source Patterns | Type Hypothesis | Status | Stage D Readiness |
-|---|---|---|---|---|
-| CANDIDATE-001 Targeted Engineering Revision | PATTERN-001 (+003 linkage) | SKILL | STRONG_CANDIDATE | READY_FOR_DESIGN |
-| CANDIDATE-002 Repository Tooling Validation Gate | PATTERN-003 (+008 support) | SKILL | STRONG_CANDIDATE | READY_FOR_DESIGN |
-| CANDIDATE-003 Task Closeout Lifecycle | PATTERN-002 (+009 support) | WORKFLOW | STRONG_CANDIDATE | READY_FOR_DESIGN |
-| CANDIDATE-004 Explicit Task Boundary Definition | PATTERN-004 | SKILL | EMERGING_CANDIDATE | READY_FOR_DESIGN |
-| CANDIDATE-005 Spec Freeze and Contract Delivery | PATTERN-005 + PATTERN-007 | COMPOSITE | EMERGING_CANDIDATE | NEEDS_MORE_EVIDENCE |
+### Formal Candidates
+
+| Candidate | Source Patterns | Type Hypothesis | Status | Stage D Readiness | Stage D Treatment |
+|---|---|---|---|---|---|
+| CANDIDATE-001 Targeted Engineering Revision | PATTERN-001 (+002 dependency) | SKILL | STRONG_CANDIDATE | READY_FOR_DESIGN | Formal design eligible |
+| CANDIDATE-002 Repository Tooling Validation Gate | PATTERN-003 (+008 support) | SKILL | STRONG_CANDIDATE | READY_FOR_DESIGN | Formal design eligible |
+| CANDIDATE-003 Task Closeout Lifecycle | PATTERN-002 (+009 support; consumes 004 artifact) | WORKFLOW | STRONG_CANDIDATE | READY_FOR_DESIGN | Formal design eligible |
+| CANDIDATE-004 Explicit Task Boundary Definition | PATTERN-004 | SKILL | EMERGING_CANDIDATE | READY_FOR_DESIGN | Formal design eligible (lightweight) |
+| CANDIDATE-005 Spec Freeze and Contract Delivery | PATTERN-005 + PATTERN-007 | COMPOSITE | EMERGING_CANDIDATE | NEEDS_MORE_EVIDENCE | OBSERVE_ONLY |
 
 ### Strong Candidates
 
@@ -817,21 +1014,62 @@ CANDIDATE-003
 
 ```text
 CANDIDATE-004
-CANDIDATE-005
+CANDIDATE-005 (OBSERVE_ONLY in Stage D — not formal design)
 ```
 
-### Deferred Candidates
+### Deferred Pattern Opportunities
 
 ```text
 PATTERN-006 Repository Compatibility Inspection
-(no candidate ID promoted)
+Deferred before candidate promotion
+(no CANDIDATE-006; not a Deferred Candidate)
 ```
 
-### Rejected Candidates (as independent assets)
+### Rejected Independent Asset Opportunities
 
 ```text
 PATTERN-008 Layered Validation Composition
 PATTERN-009 Learning Capture After Friction
+```
+
+### Conceptual Relationship Graph
+
+```text
+CANDIDATE-001
+        │
+        │ requests validation
+        ▼
+CANDIDATE-002
+```
+
+```text
+CANDIDATE-004
+        │
+        │ produces
+        ▼
+Boundary Artifact
+        │
+        │ consumed by
+        ▼
+CANDIDATE-003
+```
+
+```text
+CANDIDATE-005
+        │
+        └── EMERGING_CANDIDATE
+              ↓
+           OBSERVE_ONLY
+              ↓
+     Not eligible for formal Stage D design
+```
+
+```text
+PATTERN-006
+        ↓
+Deferred Pattern Opportunity
+        ↓
+Not promoted to Candidate
 ```
 
 ---
