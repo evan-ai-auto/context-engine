@@ -89,17 +89,17 @@ Extraction readiness: `READY_FOR_STAGE_C` | `NEEDS_MORE_EVIDENCE` | `DO_NOT_EXTR
 
 ## 4. Pattern Summary
 
-| Pattern ID | Pattern Name | Evidence Level | Occurrences | Confidence | Maturity |
-|---|---|---:|---:|---|---|
-| PATTERN-001 | Review → Targeted Revision → Validation | REPEATED | 4 | HIGH | REUSABLE_HYPOTHESIS |
-| PATTERN-002 | Task Closeout Lifecycle | REPEATED | 2 | HIGH | REUSABLE_HYPOTHESIS |
-| PATTERN-003 | Tooling Validation Gate | REPEATED | ≥2 task closures + mid-stage runs | HIGH | REUSABLE_HYPOTHESIS |
-| PATTERN-004 | Explicit Task Boundary Definition | REPEATED | 2 | MEDIUM | EMERGING |
-| PATTERN-005 | Decision → Freeze → Implement | STRUCTURAL | 1 (TASK-002) | MEDIUM | EMERGING |
-| PATTERN-006 | Repository Compatibility Inspection | STRUCTURAL | 1 | MEDIUM | OBSERVED |
-| PATTERN-007 | Contract → Implement → Contract Test | STRUCTURAL | 1 | MEDIUM | EMERGING |
+| Pattern ID | Pattern Name | Evidence Level | Occurrence Evidence | Confidence | Maturity |
+|---|---|---|---|---|---|
+| PATTERN-001 | Review → Targeted Revision → Validation | REPEATED | 4 related cycles | HIGH | REUSABLE_HYPOTHESIS |
+| PATTERN-002 | Task Closeout Lifecycle | REPEATED | 2 completed tasks | HIGH | REUSABLE_HYPOTHESIS |
+| PATTERN-003 | Tooling Validation Gate | REPEATED | ≥2 task closures + multiple stage runs | HIGH | REUSABLE_HYPOTHESIS |
+| PATTERN-004 | Explicit Task Boundary Definition | REPEATED | 2 completed tasks | MEDIUM | EMERGING |
+| PATTERN-005 | Decision → Freeze → Implement | STRUCTURAL | 1 TASK-002 chain | MEDIUM | EMERGING |
+| PATTERN-006 | Repository Compatibility Inspection | STRUCTURAL | 1 TASK-002 Stage B | MEDIUM | OBSERVED |
+| PATTERN-007 | Contract → Implement → Contract Test | STRUCTURAL | 1 TASK-002 chain | MEDIUM | EMERGING |
 | PATTERN-008 | Layered Validation Composition | STRUCTURAL | 1 strong (TASK-002); partial (TASK-001) | MEDIUM | EMERGING |
-| PATTERN-009 | Learning Capture After Friction | REPEATED | 2+ notes | MEDIUM | EMERGING |
+| PATTERN-009 | Learning Capture After Friction | REPEATED | 2+ notes across both tasks | MEDIUM | EMERGING |
 
 ---
 

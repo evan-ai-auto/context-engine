@@ -129,14 +129,11 @@ IN_PROGRESS
 
 Completed Stages:
 
-Stage A — Historical Process Inventory
-Stage B — Engineering Pattern Extraction
+- Stage A — Historical Process Inventory
+- Stage B — Engineering Pattern Extraction
 
 Current Stage:
-Stage B — Engineering Pattern Extraction
-COMPLETED
 
-Next Stage:
 Stage C — Asset Candidate Identification
 ```
 
