@@ -2,29 +2,49 @@
 
 ## Status
 
-SPECIFICATION_FROZEN
+```text
+DONE
+```
 
-Stage A — Comprehensive Domain Architecture Reconciliation is complete.
+Stage A — Comprehensive Domain Architecture Reconciliation:
 
-Revision-001 — Domain Contract Finalization is **APPROVED**.
+```text
+APPROVED
+```
 
-Stage B — Repository Compatibility Inspection is **APPROVED**.
+Revision-001 — Domain Contract Finalization:
+
+```text
+APPROVED
+```
+
+Stage B — Repository Compatibility Inspection:
+
+```text
+APPROVED
+```
 
 Stage C1 — Core Domain Model Implementation:
 
 ```text
-APPROVED_WITH_MINOR_FIXES
+APPROVED
 ```
 
 Revision-002 — Serialization Contract Completion:
 
 ```text
-IMPLEMENTED_PENDING_REVIEW
+APPROVED
 ```
 
-- Do **not** mark TASK-002 as DONE
-- Do **not** perform final closeout yet
-- Implementation targets **Python >= 3.10**
+Stage C2 — Final Validation + Closeout:
+
+```text
+COMPLETED
+```
+
+Implementation targets **Python >= 3.10**.
+
+Closeout: [`sessions/TASK-002/08-closeout.md`](../sessions/TASK-002/08-closeout.md)
 
 ## Canonical sources
 

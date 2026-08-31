@@ -58,9 +58,10 @@ Complete only with **actually executed** results after implementation. Specifica
 |---------|--------|-------|
 | `python --version` | PASS | 3.10.11 |
 | `pip install -e ".[dev]"` | PASS | pydantic 2.13.5 |
-| `pytest` | PASS | 42 passed |
+| `pytest` | PASS | 44 passed (Stage C2 final) |
 | `ruff check .` | PASS | |
 | `mypy src` | PASS | 13 source files |
+| `git diff --check` | PASS | no whitespace errors |
 
 ---
 
@@ -71,7 +72,8 @@ Complete only with **actually executed** results after implementation. Specifica
 | Stage A reconciler | | | SPECIFICATION_FROZEN |
 | Revision-001 | | | APPROVED |
 | Stage B inspection | | | APPROVED_WITH_WARNINGS |
-| Stage C1 implementer | | 2026-08-31 | IMPLEMENTED_PENDING_REVIEW |
-| Reviewer | | | |
+| Stage C1 implementer | | 2026-08-31 | APPROVED |
+| Revision-002 | | 2026-08-31 | APPROVED |
+| Stage C2 closeout | | 2026-08-31 | COMPLETED |
 
-Status: **Stage C1 IMPLEMENTED_PENDING_REVIEW** (TASK-002 not DONE)
+Status: **TASK-002 DONE** (see `08-closeout.md`)
