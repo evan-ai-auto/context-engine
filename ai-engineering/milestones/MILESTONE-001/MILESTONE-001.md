@@ -137,10 +137,11 @@ Completed Stages:
 - Stage C — Asset Candidate Identification
 - Stage D1 — Candidate Design Framework
 - Stage D1 Revision-001 — AI Engineering Asset Taxonomy (COMPLETED)
+- Stage D2A — CANDIDATE-001 Asset Design (COMPLETED)
 
 Current Stage:
 
-Stage D2 — Strong Candidate Design
+Stage D2B — CANDIDATE-002 Asset Design
 ```
 
 Milestone outputs:
@@ -150,4 +151,5 @@ ai-engineering/milestones/MILESTONE-001/01-process-inventory.md
 ai-engineering/milestones/MILESTONE-001/02-engineering-patterns.md
 ai-engineering/milestones/MILESTONE-001/03-asset-candidates.md
 ai-engineering/milestones/MILESTONE-001/04-candidate-design-framework.md
+ai-engineering/milestones/MILESTONE-001/05-candidate-001-targeted-engineering-revision.md
 ```
