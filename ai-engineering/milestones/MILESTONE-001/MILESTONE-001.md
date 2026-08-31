@@ -127,15 +127,19 @@ MILESTONE-001
 Status:
 IN_PROGRESS
 
+Stage D:
+IN_PROGRESS
+
 Completed Stages:
 
 - Stage A — Historical Process Inventory
 - Stage B — Engineering Pattern Extraction
 - Stage C — Asset Candidate Identification
+- Stage D1 — Candidate Design Framework
 
 Current Stage:
 
-Stage D — Candidate Design
+Stage D2 — Strong Candidate Design
 ```
 
 Milestone outputs:
@@ -144,4 +148,5 @@ Milestone outputs:
 ai-engineering/milestones/MILESTONE-001/01-process-inventory.md
 ai-engineering/milestones/MILESTONE-001/02-engineering-patterns.md
 ai-engineering/milestones/MILESTONE-001/03-asset-candidates.md
+ai-engineering/milestones/MILESTONE-001/04-candidate-design-framework.md
 ```
