@@ -19,36 +19,36 @@ Complete only with **actually executed** results after implementation. Specifica
 
 ## Preconditions (implementation)
 
-- [ ] Architecture remains frozen (no silent redesign; no extra enum members)
-- [ ] Implementation matches `03-domain-model-contract.md`
-- [ ] No scanner / analyzer / generator / new CLI features added
-- [ ] Pydantic 2.x pin chosen for Python >= 3.10 before adding to `pyproject.toml`
+- [x] Architecture remains frozen (no silent redesign; no extra enum members)
+- [x] Implementation matches `03-domain-model-contract.md`
+- [x] No scanner / analyzer / generator / new CLI features added
+- [x] Pydantic 2.x pin chosen for Python >= 3.10 before adding to `pyproject.toml`
 
 ---
 
 ## Domain contract consistency
 
-- [ ] Aggregate uses `project_dependencies` (not `dependencies`)
-- [ ] Required vs optional fields match contract
-- [ ] Enums limited to ModuleType, DependencyScope, EvidenceType, AnalysisStatus
-- [ ] Enum members match frozen vocabularies exactly
-- [ ] `Dependency.ecosystem` is required `str` (not enum)
-- [ ] `Technology.evidence` and `Dependency.evidence` are `list[Evidence]`
-- [ ] Evidence fields: `source_file`, `source_type`, `detail`
-- [ ] `Module.depends_on` present; no `Module.dependencies`
-- [ ] `GenerationMetadata.analysis_status` present
-- [ ] `GenerationMetadata.generated_at` is domain `datetime` (ISO strings OK as deserialization input only)
-- [ ] Public package API exports core models from `domain`
+- [x] Aggregate uses `project_dependencies` (not `dependencies`)
+- [x] Required vs optional fields match contract
+- [x] Enums limited to ModuleType, DependencyScope, EvidenceType, AnalysisStatus
+- [x] Enum members match frozen vocabularies exactly
+- [x] `Dependency.ecosystem` is required `str` (not enum)
+- [x] `Technology.evidence` and `Dependency.evidence` are `list[Evidence]`
+- [x] Evidence fields: `source_file`, `source_type`, `detail`
+- [x] `Module.depends_on` present; no `Module.dependencies`
+- [x] `GenerationMetadata.analysis_status` present
+- [x] `GenerationMetadata.generated_at` is domain `datetime` (ISO strings OK as deserialization input only)
+- [x] Public package API exports core models from `domain`
 
 ---
 
 ## Behavioral checks
 
-- [ ] Multiple evidence records supported
-- [ ] Partial context via `analysis_status=partial` supported
-- [ ] Serialization round-trip works (including datetime ↔ ISO)
-- [ ] Invalid enums / missing required fields fail validation
-- [ ] Existing tests still pass
+- [x] Multiple evidence records supported
+- [x] Partial context via `analysis_status=partial` supported
+- [x] Serialization round-trip works (including datetime ↔ ISO)
+- [x] Invalid enums / missing required fields fail validation
+- [x] Existing tests still pass
 
 ---
 
@@ -56,11 +56,11 @@ Complete only with **actually executed** results after implementation. Specifica
 
 | Command | Result | Notes |
 |---------|--------|-------|
-| `python --version` | _pending_ | expect >= 3.10 |
-| `pip install -e ".[dev]"` | _pending_ | |
-| `pytest` | _pending_ | |
-| `ruff check .` | _pending_ | |
-| `mypy src` | _pending_ | |
+| `python --version` | PASS | 3.10.11 |
+| `pip install -e ".[dev]"` | PASS | pydantic 2.13.5 |
+| `pytest` | PASS | 42 passed |
+| `ruff check .` | PASS | |
+| `mypy src` | PASS | 13 source files |
 
 ---
 
@@ -70,7 +70,8 @@ Complete only with **actually executed** results after implementation. Specifica
 |------|--------------|------|---------|
 | Stage A reconciler | | | SPECIFICATION_FROZEN |
 | Revision-001 | | | APPROVED |
-| Implementer | | | |
+| Stage B inspection | | | APPROVED_WITH_WARNINGS |
+| Stage C1 implementer | | 2026-08-31 | IMPLEMENTED_PENDING_REVIEW |
 | Reviewer | | | |
 
-Status: **SPECIFICATION_FROZEN** + Revision-001 **APPROVED** (implementation not started)
+Status: **Stage C1 IMPLEMENTED_PENDING_REVIEW** (TASK-002 not DONE)

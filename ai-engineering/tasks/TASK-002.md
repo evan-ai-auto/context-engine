@@ -8,11 +8,16 @@ Stage A — Comprehensive Domain Architecture Reconciliation is complete.
 
 Revision-001 — Domain Contract Finalization is **APPROVED**.
 
-The specification is frozen and ready for the **Repository Compatibility Inspection** / pre-implementation gate.
+Stage B — Repository Compatibility Inspection is **APPROVED**.
+
+Stage C1 — Core Domain Model Implementation:
+
+```text
+IMPLEMENTED_PENDING_REVIEW
+```
 
 - Do **not** mark TASK-002 as DONE
-- Do **not** treat implementation as complete
-- Implementation of `src/ai_context/domain/` has **not** started
+- Do **not** perform final closeout yet
 - Implementation targets **Python >= 3.10**
 
 ## Canonical sources
