@@ -127,6 +127,21 @@ MILESTONE-001
 Status:
 IN_PROGRESS
 
-Current Stage:
+Completed Stages:
+
 Stage A — Historical Process Inventory
+Stage B — Engineering Pattern Extraction
+
+Current Stage:
+Stage B — Engineering Pattern Extraction
+COMPLETED
+
+Next Stage:
+Stage C — Asset Candidate Identification
+```
+
+Pattern analysis output:
+
+```text
+ai-engineering/milestones/MILESTONE-001/02-engineering-patterns.md
 ```
