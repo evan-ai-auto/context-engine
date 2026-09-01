@@ -128,7 +128,10 @@ Status:
 IN_PROGRESS
 
 Stage D:
-IN_PROGRESS
+COMPLETED
+
+Stage E:
+COMPLETED
 
 Completed Stages:
 
@@ -145,30 +148,32 @@ Completed Stages:
 - Stage D2 Review — Strong Candidate Architecture Consistency (COMPLETED)
 - Stage D3 — Candidate Portfolio Reassessment (COMPLETED)
 - Stage D4 — CANDIDATE-004 Asset Type Confirmation & Design (COMPLETED)
+- Stage E — Asset Validation & Extraction Readiness Plan (COMPLETED)
 
 Current Stage:
 
-Stage D4 — CANDIDATE-004 Asset Type Confirmation & Design
+Stage E — Asset Validation & Extraction Readiness Plan
 Status: COMPLETED
 
-CANDIDATE-004 Design:
-- Primary Asset Type: SKILL (EXECUTABLE)
-- Supporting Asset Type: TEMPLATE (not independent Candidate)
-- Status: DESIGNED
-- Boundary Artifact: REQUIRED (conceptual)
-- Lifecycle: MINIMUM (PROPOSED / CONFIRMED / SUPERSEDED)
-- Shared Contract Decision: FUTURE_EXTRACTION_CANDIDATE
+Validation Plan:
+- Subjects: CANDIDATE-001, 002, 003, 004 (+ Boundary Template under 004)
+- Excluded: CANDIDATE-005 (OBSERVE_ONLY), PATTERN-006 (DEFERRED)
+- Dispositions NOT applied in Stage E (future evidence required)
+- No asset marked IMPLEMENTATION READY by Stage E alone
 
-Portfolio notes (unchanged dispositions outside 004):
+Designed Portfolio (unchanged by Stage E):
+- CANDIDATE-001/002/004 → SKILL (DESIGNED)
+- CANDIDATE-003 → WORKFLOW (DESIGNED)
 - CANDIDATE-005 → KEEP_OBSERVING (OBSERVE_ONLY)
 - PATTERN-006 → DEFER_TO_FUTURE_MILESTONE
-- D2 Strong Candidates remain FROZEN_WITH_OBSERVATIONS / DESIGNED
 
-Recommended Next Step (pending external review):
-Architecture review of CANDIDATE-004 design.
-Do not implement CANDIDATE-004, create Skill/Template/Rule files,
-promote CANDIDATE-005, create shared contracts, or modify 001–003
-until authorized.
+Recommended Next Step:
+External Review
++
+Milestone Closeout Decision
+
+Do not mark MILESTONE-001 COMPLETED, create the next milestone,
+implement assets, or promote CANDIDATE-005 until authorized.
 ```
 
 Milestone outputs:
@@ -184,4 +189,5 @@ ai-engineering/milestones/MILESTONE-001/07-candidate-003-task-closeout-lifecycle
 ai-engineering/milestones/MILESTONE-001/08-stage-d2-strong-candidate-architecture-review.md
 ai-engineering/milestones/MILESTONE-001/09-stage-d3-candidate-portfolio-reassessment.md
 ai-engineering/milestones/MILESTONE-001/10-candidate-004-explicit-task-boundary-definition.md
+ai-engineering/milestones/MILESTONE-001/11-stage-e-asset-validation-plan.md
 ```
