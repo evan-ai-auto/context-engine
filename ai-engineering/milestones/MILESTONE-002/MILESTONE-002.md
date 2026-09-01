@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage C2 — EXP-M2-002 Experimental Invocation
+Stage C2 Revision-001 — Validation Dependency Attribution Correction
 Status: COMPLETED
 
 Completed Stages:
@@ -184,6 +184,7 @@ Completed Stages:
 - Stage B3 — EXP-M2-001 Evidence & Assessment
 - Stage C1 — Evidence Gap Analysis & Second Experiment Selection
 - Stage C2 — EXP-M2-002 Experimental Invocation
+- Stage C2 Revision-001 — Validation Dependency Attribution Correction
 
 Experiment EXP-M2-001:
 Single Asset — CANDIDATE-001
@@ -194,6 +195,7 @@ Experiment EXP-M2-002:
 Single Asset — CANDIDATE-001
 Task: Domain Enum Entity-Level Test Plan Completion
 Invocation: COMPLETED (execution + evidence capture)
+Record correction: C2 Revision-001 — validation dependency attribution (docs only)
 Target Modified: Yes (tests/domain/ — 4 entity test modules; T-04–T-07)
 Assessment: Deferred to Stage C3
 

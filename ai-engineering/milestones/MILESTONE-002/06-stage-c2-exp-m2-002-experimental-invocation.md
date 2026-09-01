@@ -167,8 +167,9 @@ Determine Validation → Supporting Validation → Report → STOP
 | Define Boundary | Four entity test modules in scope |
 | Plan | §8 |
 | Execute | Four parametrized tests added |
-| Validation Required | Yes (tests changed) |
-| Supporting Validation | pytest 65 passed; ruff clean |
+| Validation Required | Yes (tests changed) — **OBSERVED** via CANDIDATE-001 procedure step |
+| Validation Dependency Request | **NOT TESTED** — experiment isolation (see §14) |
+| Supporting Validation | pytest 65 passed; ruff clean — manual commands, not CANDIDATE-002 |
 | Report | This document |
 | Stop | No src/, no test_enums rewrite, no docs drive-by |
 
@@ -195,9 +196,18 @@ No scope expansion beyond discovered four files.
 |---|---|---|
 | Chose parametrized `list(Enum)` pattern | Minimal, matches pytest conventions | Normal engineering judgment |
 | Excluded test_enums.py from edits | Inspect showed enum-class already complete | Boundary step — not override |
-| Skipped formal CANDIDATE-002 gate | Test-only change; pytest sufficient | Same adaptation class as M2-001 |
+| Did not invoke CANDIDATE-002 | EXP-M2-002 single-asset isolation prohibits co-evaluation | **Experiment Isolation Adaptation** |
 
 ```text
+Removed (Revision-001): prior row "Skipped formal CANDIDATE-002 gate —
+Test-only change; pytest sufficient" — that implied a normal engineering
+decision that validation dependency was unnecessary.
+
+Correct classification:
+  Validation Required: YES (tests changed)
+  Dependency Invocation (CANDIDATE-002): NOT TESTED
+  Supporting Validation: EXECUTED MANUALLY (pytest, ruff, diff check)
+
 Human did not predefine all four files before Inspect — boundary emerged
 from plan row → entity file mapping during Define Boundary.
 No repeated correction loops.
@@ -207,12 +217,40 @@ No repeated correction loops.
 
 ## 12. Procedure Adaptations
 
-| Expected | Actual | Reason |
-|---|---|---|
-| Request Validation → CANDIDATE-002 | pytest + ruff only | Test-only revision; no tooling gate claim |
-| Possible shared helper | Inline parametrized tests | Not genuinely required |
+### Expected normal behavior (authoritative design)
 
 ```text
+CANDIDATE-001
+        ↓
+REQUEST CANDIDATE-002
+        ↓
+Validation Execution (CANDIDATE-002 owns gate execution)
+```
+
+Reference: `05-candidate-001-targeted-engineering-revision.md` — REQUESTS ≠ OWNS.
+
+### Actual experiment behavior
+
+```text
+CANDIDATE-001
+        ↓
+Validation Required Determined (OBSERVED)
+        ↓
+CANDIDATE-002 Invocation Prohibited
+  (EXP-M2-002 single-asset experiment isolation)
+        ↓
+Manual Supporting Engineering Validation
+  (pytest, ruff, git diff --check)
+```
+
+| Adaptation | Classification |
+|---|---|
+| No CANDIDATE-002 REQUEST/delegation | **Experiment Isolation Adaptation** — NOT Procedure Success / Dependency Success |
+| Inline parametrized tests vs shared helper | Normal engineering judgment — not validation-related |
+
+```text
+Do NOT classify the 002 non-invocation as "pytest was sufficient"
+replacing the designed dependency — isolation prevented testing delegation.
 Adaptation ≠ Asset Failure — recorded for Stage C3.
 ```
 
@@ -222,24 +260,90 @@ Adaptation ≠ Asset Failure — recorded for Stage C3.
 
 ```text
 Validation Required: YES
+Status: OBSERVED
 
-Reason: tests/domain/ changed; acceptance criteria require passing pytest;
-regression risk on domain contract tests.
+Attribution:
+  CANDIDATE-001 procedure step "Determine Validation Requirement"
+  after test changes in tests/domain/.
+
+Evidence:
+  Tests changed → acceptance criteria require regression proof →
+  validation evidence required before revision disposition.
+
+This section records Requirement Determination only —
+not Validation Execution or CANDIDATE-002 delegation.
 ```
 
 ---
 
-## 14. Experiment Isolation
+## 14. Validation Dependency Attribution
+
+### A. Validation Requirement Determination
 
 ```text
-CANDIDATE-002 NOT invoked as experimental subject.
+Observed:
+  CANDIDATE-001 procedure determined validation evidence was required
+  after tests/domain/ changed.
 
-Supporting Engineering Validation:
-  pytest — 65 passed (was 44; +21 parametrized cases)
-  ruff check tests/domain/ (changed files) — passed
-  git diff --check — passed
+Status: OBSERVED
+Attributed to: CANDIDATE-001 (requirement-determination step only)
+```
 
-Running pytest ≠ validating CANDIDATE-002.
+### B. Validation Dependency Request
+
+```text
+According to design, CANDIDATE-001 normally REQUESTS CANDIDATE-002
+when validation is required.
+
+Status: NOT TESTED / NOT OBSERVED DUE TO EXPERIMENT ISOLATION
+
+No Validation Request Record was produced.
+Do not claim successful dependency delegation.
+```
+
+### C. Validation Asset Invocation (CANDIDATE-002)
+
+```text
+CANDIDATE-002 was intentionally not invoked because EXP-M2-002 was
+isolated to CANDIDATE-001 as a Single Asset Experiment.
+
+Status: NOT TESTED
+
+This was an experiment isolation constraint —
+not a determination that CANDIDATE-002 was unnecessary for this revision
+in normal (non-experiment) operation.
+```
+
+### D. Supporting Engineering Validation
+
+Repository commands executed manually:
+
+```text
+pytest       — 65 passed (was 44; +21 parametrized cases)
+ruff check   — tests/domain/ changed files — passed
+git diff --check — passed
+```
+
+```text
+Classification: Supporting Engineering Validation
+
+Supporting Engineering Validation ≠ CANDIDATE-002 Invocation
+Supporting Engineering Validation Success ≠ Validation Dependency Success
+Running pytest ≠ validating CANDIDATE-002
+```
+
+### Evidence limitation (EXP-M2-002 supports / does not support)
+
+| Supports | Does not support |
+|---|---|
+| Validation Requirement Determination (OBSERVED) | Dependency Request Behavior |
+| Revision execution under 001 procedure | CANDIDATE-002 Invocation |
+| Manual engineering validation occurred | Validation Delegation Behavior |
+| | Asset Composition Behavior |
+
+```text
+Formal assessment of 001 value, boundary discovery, and procedure utility
+deferred to Stage C3 — not resolved in this attribution correction.
 ```
 
 ---
@@ -313,7 +417,8 @@ Production models: unchanged
 ```text
 Revision Result: RESOLVED
 Revision Scope: four entity test modules under tests/domain/
-Validation: pytest + ruff (supporting engineering validation)
+Supporting Engineering Validation: pytest + ruff (manual; not CANDIDATE-002)
+Validation dependency (001 REQUESTS 002): NOT TESTED in this experiment
 ```
 
 ---
@@ -367,6 +472,29 @@ Do NOT conclude VALIDATED / REJECTED / IMPLEMENT from this stage alone.
 Assessment deferred to Stage C3 (or later authorized stage).
 
 CANDIDATE-001 lifecycle: VALIDATION_READY (unchanged).
+```
+
+---
+
+## 23. Stage C2 Revision-001 — Validation Dependency Attribution Correction
+
+```text
+Revision: C2-revision-001 (documentation only)
+Date: 2026-09-02
+Scope: Correct attribution in this record only — no experiment re-run.
+
+Problem corrected:
+  Conflation of Validation Requirement Determination with Validation
+  Execution / CANDIDATE-002 dependency behavior.
+
+Changes:
+  §9 execution table — dependency NOT TESTED called out
+  §11 Human Intervention — Experiment Isolation Adaptation (not "pytest sufficient")
+  §12 Procedure Adaptations — expected REQUEST vs actual isolation path
+  §13–§14 — Validation Requirement vs Dependency Attribution separated
+
+Historical execution unchanged. No new experimental facts invented.
+Engineering test artifacts unchanged (630e652).
 ```
 
 ---
