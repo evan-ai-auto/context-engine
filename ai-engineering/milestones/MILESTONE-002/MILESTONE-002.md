@@ -174,33 +174,34 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage B2 — EXP-M2-001 Experimental Invocation
+Stage B3 — EXP-M2-001 Evidence & Assessment
 Status: COMPLETED
 
 Completed Stages:
 - Stage A — Validation Experiment Framework
 - Stage B1 — First Experiment Selection & Definition
 - Stage B2 — EXP-M2-001 Experimental Invocation
-
-Stage B1 Decision:
-SELECTED
+- Stage B3 — EXP-M2-001 Evidence & Assessment
 
 Experiment EXP-M2-001:
 Single Asset — CANDIDATE-001 Targeted Engineering Revision
 Task: Post-closeout Future Transition Pointer Hygiene
-Invocation: COMPLETED (execution + evidence capture)
+Invocation: COMPLETED
 Target Modified: Yes (MILESTONE-001.md Future Transition Direction only)
-Assessment: Deferred to Stage B3
+Preliminary Experiment Outcome: MIXED EVIDENCE
+Experiment Assessment: COMPLETED
+Final Asset Disposition: NONE (not made in Stage B3)
 
 Asset Lifecycle Status (unchanged):
 CANDIDATE-001 remains VALIDATION_READY (not VALIDATED)
-(VALIDATING transition uncertain — not applied)
 
 Recommended Next Step (pending authorization):
-Stage B3 — EXP-M2-001 Evidence & Assessment
+Further CANDIDATE-001 validation experiments and/or later milestone
+disposition stages — not auto-started from Stage B3.
 
-Do not perform final asset assessment, promote lifecycle status,
-implement assets, or start unrelated experiments until authorized.
+Do not promote CANDIDATE-001 to VALIDATED or IMPLEMENTATION_READY,
+implement assets, or modify CANDIDATE-001 design solely on EXP-M2-001
+until authorized by future stages.
 ```
 
 Milestone outputs:
@@ -210,4 +211,5 @@ ai-engineering/milestones/MILESTONE-002/MILESTONE-002.md
 ai-engineering/milestones/MILESTONE-002/01-validation-experiment-framework.md
 ai-engineering/milestones/MILESTONE-002/02-stage-b1-first-experiment-selection.md
 ai-engineering/milestones/MILESTONE-002/03-stage-b2-exp-m2-001-experimental-invocation.md
+ai-engineering/milestones/MILESTONE-002/04-stage-b3-exp-m2-001-evidence-and-assessment.md
 ```
