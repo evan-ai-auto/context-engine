@@ -125,12 +125,15 @@ Stage A succeeds when:
 MILESTONE-001
 
 Status:
-IN_PROGRESS
+COMPLETED
 
 Stage D:
 COMPLETED
 
 Stage E:
+COMPLETED
+
+Final Architecture Review & Closeout:
 COMPLETED
 
 Completed Stages:
@@ -149,31 +152,34 @@ Completed Stages:
 - Stage D3 — Candidate Portfolio Reassessment (COMPLETED)
 - Stage D4 — CANDIDATE-004 Asset Type Confirmation & Design (COMPLETED)
 - Stage E — Asset Validation & Extraction Readiness Plan (COMPLETED)
+- Final Architecture Review & Closeout Decision (COMPLETED)
 
-Current Stage:
+Final Closeout Decision:
+CLOSE_WITH_OBSERVATIONS
 
-Stage E — Asset Validation & Extraction Readiness Plan
-Status: COMPLETED
+Goal Assessment:
+ACHIEVED
 
-Validation Plan:
-- Subjects: CANDIDATE-001, 002, 003, 004 (+ Boundary Template under 004)
-- Excluded: CANDIDATE-005 (OBSERVE_ONLY), PATTERN-006 (DEFERRED)
-- Dispositions NOT applied in Stage E (future evidence required)
-- No asset marked IMPLEMENTATION READY by Stage E alone
+Architecture Consistency:
+ARCHITECTURE_CONSISTENT_WITH_OBSERVATIONS
 
-Designed Portfolio (unchanged by Stage E):
-- CANDIDATE-001/002/004 → SKILL (DESIGNED)
-- CANDIDATE-003 → WORKFLOW (DESIGNED)
-- CANDIDATE-005 → KEEP_OBSERVING (OBSERVE_ONLY)
-- PATTERN-006 → DEFER_TO_FUTURE_MILESTONE
+Portfolio Status:
+MINIMAL_SUFFICIENT
+- CANDIDATE-001/002/004 → SKILL (DESIGNED / VALIDATION_READY)
+- CANDIDATE-003 → WORKFLOW (DESIGNED / VALIDATION_READY)
+- CANDIDATE-005 → OBSERVE_ONLY
+- PATTERN-006 → DEFERRED
 
-Recommended Next Step:
-External Review
-+
-Milestone Closeout Decision
+Validation Readiness:
+SUFFICIENT (plan only — assets not VALIDATED)
 
-Do not mark MILESTONE-001 COMPLETED, create the next milestone,
-implement assets, or promote CANDIDATE-005 until authorized.
+Milestone Completion ≠ Asset Implementation Readiness.
+Do not implement assets, promote CANDIDATE-005, or create the next
+milestone solely because MILESTONE-001 is CLOSED_WITH_OBSERVATIONS.
+
+Future Transition Direction:
+Asset Implementation & Real-World Validation
+(evidence-gated; no milestone identifier assigned here)
 ```
 
 Milestone outputs:
@@ -190,4 +196,5 @@ ai-engineering/milestones/MILESTONE-001/08-stage-d2-strong-candidate-architectur
 ai-engineering/milestones/MILESTONE-001/09-stage-d3-candidate-portfolio-reassessment.md
 ai-engineering/milestones/MILESTONE-001/10-candidate-004-explicit-task-boundary-definition.md
 ai-engineering/milestones/MILESTONE-001/11-stage-e-asset-validation-plan.md
+ai-engineering/milestones/MILESTONE-001/12-final-architecture-review-and-closeout.md
 ```
