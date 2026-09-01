@@ -143,21 +143,27 @@ Completed Stages:
 - Stage D2B Revision-001 — Gate Requirement Boundary (COMPLETED)
 - Stage D2C — CANDIDATE-003 Asset Design (COMPLETED)
 - Stage D2 Review — Strong Candidate Architecture Consistency (COMPLETED)
+- Stage D3 — Candidate Portfolio Reassessment (COMPLETED)
 
 Current Stage:
 
-Stage D2 — Strong Candidate Design
-Status: FROZEN_WITH_OBSERVATIONS
+Stage D3 — Candidate Portfolio Reassessment
+Status: COMPLETED
 
-Verdict:
-ARCHITECTURE_CONSISTENT_WITH_OBSERVATIONS
+Portfolio Health:
+HEALTHY_WITH_OBSERVATIONS
 
-Freeze recommendation:
-FREEZE_WITH_OBSERVATIONS
+Dispositions:
+- CANDIDATE-004 → PROMOTE_TO_DESIGN
+- CANDIDATE-005 → KEEP_OBSERVING (OBSERVE_ONLY)
+- PATTERN-006 → DEFER_TO_FUTURE_MILESTONE
 
-Strong Candidates CANDIDATE-001 / 002 / 003 remain DESIGNED.
-Do not begin CANDIDATE-004 design, Stage D3, shared contracts,
-or asset implementation until authorized after external review.
+Recommended Next Step (pending external review):
+DESIGN_CANDIDATE-004
+
+D2 Strong Candidates remain FROZEN_WITH_OBSERVATIONS / DESIGNED.
+Do not begin CANDIDATE-004 design, promote CANDIDATE-005,
+create shared contracts, or implement assets until authorized.
 ```
 
 Milestone outputs:
@@ -171,4 +177,5 @@ ai-engineering/milestones/MILESTONE-001/05-candidate-001-targeted-engineering-re
 ai-engineering/milestones/MILESTONE-001/06-candidate-002-repository-tooling-validation-gate.md
 ai-engineering/milestones/MILESTONE-001/07-candidate-003-task-closeout-lifecycle.md
 ai-engineering/milestones/MILESTONE-001/08-stage-d2-strong-candidate-architecture-review.md
+ai-engineering/milestones/MILESTONE-001/09-stage-d3-candidate-portfolio-reassessment.md
 ```
