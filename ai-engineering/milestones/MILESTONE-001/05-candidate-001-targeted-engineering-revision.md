@@ -320,7 +320,9 @@ Stop / Failure Reason
 
 ```text
 Validation Request Record
-  What was requested from CANDIDATE-002 (or why skipped)
+  What was requested from CANDIDATE-002,
+  or why validation was not required,
+  or (if pending) that External Authority authorized deferral
 
 Validation Evidence (consumed)
   Pass/fail / pending results returned by validation capability
@@ -409,14 +411,18 @@ Revision planning within stated boundary
 
 Change coordination / execution within boundary
 
-Determining whether validation is required
+Determining whether validation evidence is required
+according to declared acceptance criteria
 
 Determining revision acceptance criteria
+(excluding independent authorization to defer required validation)
 
 Consuming validation evidence
 
 Deciding whether the revision can be considered complete
-  (including “completed with validation pending” when appropriate)
+when required validation evidence is present,
+or when validation was never required per acceptance criteria,
+or when an External Authority has authorized deferral
 
 Revision result reporting and stop
 ```
@@ -427,6 +433,9 @@ Revision result reporting and stop
 Repository-standard tooling validation procedures
 Implementing / duplicating validation-gate execution
   (owned by CANDIDATE-002)
+
+Validation deferral authority
+  (whether required validation may be deferred / pending)
 
 Full task closeout lifecycle (CANDIDATE-003)
 
@@ -440,6 +449,25 @@ Autonomous continuous operation without a revision request
 ```text
 CANDIDATE-001 owns revision orchestration.
 CANDIDATE-002 owns validation execution.
+External Authority owns validation deferral authorization.
+```
+
+```text
+CANDIDATE-001 may identify that validation is required.
+
+CANDIDATE-001 may request validation execution.
+
+CANDIDATE-001 does not independently authorize
+the deferral of required validation.
+```
+
+Conceptual External Authority categories (implementation-neutral; not assets):
+
+```text
+Stage Policy
+Task Policy
+Workflow
+Human Authority
 ```
 
 ---
@@ -468,15 +496,19 @@ Conceptual dependency type: `REQUESTS`
 ### Dependency Trigger
 
 ```text
-Request validation when:
+Request validation when (requirement = YES):
   - code or tests changed, or
   - acceptance criteria require tooling evidence, or
   - stage policy requires a gate before disposition
 
-May skip request when:
-  - revision is documentation-only AND
-  - acceptance criteria explicitly do not require tooling gates AND
-  - skip is recorded in the Validation Request Record
+Do not request validation when (requirement = NO):
+  - acceptance criteria explicitly do not require tooling gates
+    (e.g. authorized docs-only hygiene with no gate requirement)
+  - and that “not required” determination is recorded
+
+Important:
+  “Validation not required” is requirement determination.
+  It is NOT deferral of required validation.
 ```
 
 ### Validation Request Boundary
@@ -512,10 +544,27 @@ If validation FAILS:
   - either repair within original boundary, or
   - STOP / ESCALATE / RETURN PARTIAL with open issues
 
-If validation UNAVAILABLE:
+If validation REQUIRED + UNAVAILABLE:
   - do not invent gate results
-  - may report Revision Completed / Validation Pending
-    or STOP / REQUEST CLARIFICATION per policy
+  - do not silently convert Required → Optional
+  - do not independently authorize Validation Pending
+  - enter External Authority decision boundary:
+
+      If External Authority authorizes deferral:
+        → may report Revision Completed / Validation Pending
+          (authorized pending only)
+
+      If no authorized deferral:
+        → BLOCKED / ESCALATED / AWAITING_EXTERNAL_DECISION
+          (Stop instead of silently proceeding)
+```
+
+```text
+Validation Required
++
+Validation Unavailable
+≠
+Validation Optional
 ```
 
 ---
@@ -544,6 +593,85 @@ Format remains implementation-neutral.
 
 ## 13. Validation Model
 
+### Three-way separation
+
+```text
+Validation Requirement
+  Who: CANDIDATE-001
+  What: whether evidence is required per acceptance criteria
+
+Validation Execution
+  Who: CANDIDATE-002
+  What: run repository tooling gates; produce evidence
+
+Validation Deferral
+  Who: External Authority (Stage/Task Policy, Workflow, Human)
+  What: whether required validation may be deferred when unavailable
+```
+
+```text
+CANDIDATE-001 determines validation necessity.
+
+CANDIDATE-002 executes repository validation.
+
+External Authority determines whether required validation may be deferred.
+```
+
+Conceptual flow:
+
+```text
+Acceptance Criteria
+        ↓
+Requirement Determination (CANDIDATE-001)
+        ↓
+Validation Evidence Required?
+        │
+        ├── NO → Revision Evaluation → Report → STOP
+        │
+        └── YES
+             ↓
+        REQUEST CANDIDATE-002
+             ↓
+        Validation Available?
+             │
+        ┌────┴────┐
+       YES       NO
+        │         │
+        ▼         ▼
+   Execute     Deferral Decision
+  Validation   (External Authority)
+        │         │
+        ▼    ┌────┴────┐
+   Evidence Authorized  Not Authorized
+        │         │         │
+        ▼         ▼         ▼
+  Revision   Pending    BLOCKED /
+  Evaluation  Result    ESCALATED
+        │         │
+        ▼         ▼
+      Report → STOP
+```
+
+```text
+Requirement Determination
+        ↓
+Validation Request
+        ↓
+Validation Execution
+        ↓
+Validation Evidence
+```
+
+If execution is unavailable:
+
+```text
+Requirement remains unchanged.
+
+Validation unavailable ≠ Validation not required.
+```
+
+Deferral Decision must be handled externally — not by CANDIDATE-001 alone.
+
 ### Asset Validation (revision success)
 
 CANDIDATE-001 evaluates:
@@ -564,6 +692,9 @@ OUTPUT VALIDATION
 ACCEPTANCE CRITERIA
   Finding/objective addressed as defined
   Known issues resolved or explicitly remaining
+  Required validation evidence present,
+  OR validation was not required,
+  OR External Authority authorized deferral (pending only)
 ```
 
 ### Repository Validation (delegated)
@@ -581,15 +712,18 @@ Revision succeeded
 Repository validation automatically succeeded
 ```
 
-Allowed result state:
+Authorized pending state (only with External Authority):
 
 ```text
 Revision Completed
 Validation Pending
 ```
 
-when changes are done but validation evidence is not yet available,
-and acceptance policy allows deferral — must be explicit in the report.
+when changes are done, validation is still required, evidence is unavailable,
+**and** External Authority has authorized deferral — must be explicit in the report.
+
+Without authorized deferral, do not use this state; use BLOCKED / ESCALATED /
+AWAITING_EXTERNAL_DECISION instead.
 
 ---
 
@@ -605,6 +739,24 @@ Required Dependency Unavailable (validation needed but cannot be requested)
 Validation Failed (and cannot repair within boundary)
 Unexpected Scope Expansion detected
 Redesign required to proceed
+
+Validation Required
++ Validation Unavailable
++ No Authorized Deferral
+  → BLOCKED / ESCALATED / AWAITING_EXTERNAL_DECISION
+```
+
+The asset must not:
+
+```text
+Silently continue when required validation is unavailable
+
+Silently downgrade Required → Optional
+
+Assume validation can be skipped when it is required
+
+Declare completion without required evidence
+  unless External Authority authorized deferral
 ```
 
 ### Outcomes
@@ -613,19 +765,27 @@ Redesign required to proceed
 STOP
   Halt; produce report with reason
 
-ESCALATE
-  Hand off to human / architecture / another candidate
+BLOCKED
+  Required validation unavailable; no authorized deferral
+
+ESCALATED
+  Hand off to human / architecture / another candidate / External Authority
+
+AWAITING_EXTERNAL_DECISION
+  Deferral decision required; stop until External Authority responds
 
 REQUEST CLARIFICATION
   Ask for missing inputs / criteria / authority
 
 RETURN PARTIAL RESULT
   Deliver what is safely in-scope; list remaining open issues
+  (must not pretend required validation was optional)
 ```
 
 ```text
 Every problem must NOT be automatically fixed.
 Knowing when not to continue is a first-class capability.
+Stop instead of silently proceeding.
 ```
 
 ---
@@ -757,10 +917,10 @@ STOP
 | Trigger Clarity | Clear (positive + negative) |
 | Input Clarity | Clear (required vs optional) |
 | Output Clarity | Clear |
-| Responsibility Boundary | Clear vs CANDIDATE-002 |
+| Responsibility Boundary | Clear vs CANDIDATE-002; deferral authority external |
 | Dependency Boundary | REQUESTS modeled |
-| Validation Model | Revision vs repository separated |
-| Failure Model | Explicit stop/escalate paths |
+| Validation Model | Requirement / Execution / Deferral separated |
+| Failure Model | Explicit stop/block/escalate; no silent downgrade |
 
 ### Readiness state
 
@@ -774,12 +934,18 @@ Reasons:
 READY:
   Design is reviewable and implementation-neutral.
   Boundaries and dependency direction are explicit.
+  Validation Authority Boundary is now defined:
+    CANDIDATE-001 = requirement determination
+    CANDIDATE-002 = execution
+    External Authority = deferral authorization
 
 CONDITIONS:
   CANDIDATE-002 must be designed (Stage D2B) before implementing
   the validation request interface end-to-end.
-  Default gate-set policy and “Validation Pending” acceptance rules
-  should be confirmed in design review.
+  Concrete External Authority binding (which Stage/Task Policy /
+  Workflow / Human path applies) remains for design review /
+  later policy work — not independently invented by this Skill.
+  Default gate-set policy should be confirmed in design review.
   Packaging location / runtime binding intentionally deferred.
 ```
 
@@ -804,8 +970,8 @@ BOUNDARY_RISK
   review evidence is mandatory?
 
 DEPENDENCY_RISK
-  Should validation requests be synchronous only, or allow async
-  “Validation Pending” as a first-class terminal disposition?
+  Which External Authority path authorizes Validation Pending
+  in common stage policies (without making CANDIDATE-001 the authorizer)?
 
 IMPLEMENTATION_UNKNOWN
   Should revision planning ever be split into a separate Skill, or
@@ -834,9 +1000,11 @@ Primary Purpose:
 ```
 
 ```text
-Owns:     Revision orchestration (scope, plan, change, consume evidence, report)
+Owns:     Revision orchestration; validation requirement determination
 Delegates: Repository tooling validation execution → CANDIDATE-002 (REQUESTS)
-Does not: Own validation gates, closeout, task-boundary definition, redesign
+           Validation deferral authorization → External Authority
+Does not: Own validation gates, deferral authority, closeout,
+          task-boundary definition, redesign
 ```
 
 ```text

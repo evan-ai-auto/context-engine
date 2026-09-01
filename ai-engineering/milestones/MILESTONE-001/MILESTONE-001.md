@@ -138,6 +138,7 @@ Completed Stages:
 - Stage D1 — Candidate Design Framework
 - Stage D1 Revision-001 — AI Engineering Asset Taxonomy (COMPLETED)
 - Stage D2A — CANDIDATE-001 Asset Design (COMPLETED)
+- Stage D2A Revision-001 — Validation Deferral Authority (COMPLETED)
 
 Current Stage:
 
