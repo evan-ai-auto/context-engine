@@ -144,26 +144,31 @@ Completed Stages:
 - Stage D2C — CANDIDATE-003 Asset Design (COMPLETED)
 - Stage D2 Review — Strong Candidate Architecture Consistency (COMPLETED)
 - Stage D3 — Candidate Portfolio Reassessment (COMPLETED)
+- Stage D4 — CANDIDATE-004 Asset Type Confirmation & Design (COMPLETED)
 
 Current Stage:
 
-Stage D3 — Candidate Portfolio Reassessment
+Stage D4 — CANDIDATE-004 Asset Type Confirmation & Design
 Status: COMPLETED
 
-Portfolio Health:
-HEALTHY_WITH_OBSERVATIONS
+CANDIDATE-004 Design:
+- Primary Asset Type: SKILL (EXECUTABLE)
+- Supporting Asset Type: TEMPLATE (not independent Candidate)
+- Status: DESIGNED
+- Boundary Artifact: REQUIRED (conceptual)
+- Lifecycle: MINIMUM (PROPOSED / CONFIRMED / SUPERSEDED)
+- Shared Contract Decision: FUTURE_EXTRACTION_CANDIDATE
 
-Dispositions:
-- CANDIDATE-004 → PROMOTE_TO_DESIGN
+Portfolio notes (unchanged dispositions outside 004):
 - CANDIDATE-005 → KEEP_OBSERVING (OBSERVE_ONLY)
 - PATTERN-006 → DEFER_TO_FUTURE_MILESTONE
+- D2 Strong Candidates remain FROZEN_WITH_OBSERVATIONS / DESIGNED
 
 Recommended Next Step (pending external review):
-DESIGN_CANDIDATE-004
-
-D2 Strong Candidates remain FROZEN_WITH_OBSERVATIONS / DESIGNED.
-Do not begin CANDIDATE-004 design, promote CANDIDATE-005,
-create shared contracts, or implement assets until authorized.
+Architecture review of CANDIDATE-004 design.
+Do not implement CANDIDATE-004, create Skill/Template/Rule files,
+promote CANDIDATE-005, create shared contracts, or modify 001–003
+until authorized.
 ```
 
 Milestone outputs:
@@ -178,4 +183,5 @@ ai-engineering/milestones/MILESTONE-001/06-candidate-002-repository-tooling-vali
 ai-engineering/milestones/MILESTONE-001/07-candidate-003-task-closeout-lifecycle.md
 ai-engineering/milestones/MILESTONE-001/08-stage-d2-strong-candidate-architecture-review.md
 ai-engineering/milestones/MILESTONE-001/09-stage-d3-candidate-portfolio-reassessment.md
+ai-engineering/milestones/MILESTONE-001/10-candidate-004-explicit-task-boundary-definition.md
 ```
