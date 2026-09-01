@@ -178,8 +178,14 @@ Do not implement assets, promote CANDIDATE-005, or create the next
 milestone solely because MILESTONE-001 is CLOSED_WITH_OBSERVATIONS.
 
 Future Transition Direction:
-Asset Implementation & Real-World Validation
-(evidence-gated; no milestone identifier assigned here)
+MILESTONE-002 — Asset Experimental Validation
+(evidence-gated real-world / experimental validation of designed assets;
+ see ai-engineering/milestones/MILESTONE-002/)
+
+Historical closeout note:
+At MILESTONE-001 closeout time, no next milestone identifier was assigned
+in the closeout decision itself (CLOSE_WITH_OBSERVATIONS). MILESTONE-002
+was created afterward for the future transition work.
 ```
 
 Milestone outputs:
