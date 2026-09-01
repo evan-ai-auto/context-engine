@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage B3 — EXP-M2-001 Evidence & Assessment
+Stage C1 — Evidence Gap Analysis & Second Experiment Selection
 Status: COMPLETED
 
 Completed Stages:
@@ -182,26 +182,28 @@ Completed Stages:
 - Stage B1 — First Experiment Selection & Definition
 - Stage B2 — EXP-M2-001 Experimental Invocation
 - Stage B3 — EXP-M2-001 Evidence & Assessment
+- Stage C1 — Evidence Gap Analysis & Second Experiment Selection
 
 Experiment EXP-M2-001:
-Single Asset — CANDIDATE-001 Targeted Engineering Revision
+Single Asset — CANDIDATE-001
 Task: Post-closeout Future Transition Pointer Hygiene
-Invocation: COMPLETED
-Target Modified: Yes (MILESTONE-001.md Future Transition Direction only)
-Preliminary Experiment Outcome: MIXED EVIDENCE
-Experiment Assessment: COMPLETED
-Final Asset Disposition: NONE (not made in Stage B3)
+Outcome: MIXED EVIDENCE (assessment complete)
+
+Experiment EXP-M2-002:
+SELECTED — NOT EXECUTED
+Single Asset — CANDIDATE-001
+Task: Domain Enum Entity-Level Test Plan Completion
+Selection rationale: contrast vs M2-001 (test/code, medium complexity,
+boundary discovery, pytest validation)
 
 Asset Lifecycle Status (unchanged):
 CANDIDATE-001 remains VALIDATION_READY (not VALIDATED)
 
 Recommended Next Step (pending authorization):
-Further CANDIDATE-001 validation experiments and/or later milestone
-disposition stages — not auto-started from Stage B3.
+Stage C2 — EXP-M2-002 Experimental Invocation
 
-Do not promote CANDIDATE-001 to VALIDATED or IMPLEMENTATION_READY,
-implement assets, or modify CANDIDATE-001 design solely on EXP-M2-001
-until authorized by future stages.
+Do not execute EXP-M2-002, promote lifecycle status, implement assets,
+or make final asset disposition until authorized.
 ```
 
 Milestone outputs:
@@ -212,4 +214,5 @@ ai-engineering/milestones/MILESTONE-002/01-validation-experiment-framework.md
 ai-engineering/milestones/MILESTONE-002/02-stage-b1-first-experiment-selection.md
 ai-engineering/milestones/MILESTONE-002/03-stage-b2-exp-m2-001-experimental-invocation.md
 ai-engineering/milestones/MILESTONE-002/04-stage-b3-exp-m2-001-evidence-and-assessment.md
+ai-engineering/milestones/MILESTONE-002/05-stage-c1-evidence-gap-and-second-experiment-selection.md
 ```
