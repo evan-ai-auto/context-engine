@@ -174,17 +174,30 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage A — Validation Experiment Framework
+Stage B1 — First Experiment Selection & Definition
 Status: COMPLETED
 
 Completed Stages:
 - Stage A — Validation Experiment Framework
+- Stage B1 — First Experiment Selection & Definition
+
+Stage B1 Decision:
+SELECTED
+
+Selected Experiment:
+EXP-M2-001
+Single Asset — CANDIDATE-001 Targeted Engineering Revision
+Task: Post-closeout Future Transition Pointer Hygiene
+(MILESTONE-001.md current Future Transition guidance vs existing MILESTONE-002)
+
+Asset Lifecycle Status (unchanged):
+CANDIDATE-001 remains VALIDATION_READY (not VALIDATED)
 
 Recommended Next Step (pending authorization):
-Stage B — First Asset Experimental Validation
+Stage B2 — Execute EXP-M2-001 (experimental invocation + bounded revision + evidence)
 
-Do not begin Stage B asset experiments, create validation records,
-or implement assets until authorized.
+Do not execute the experiment, invoke CANDIDATE-001, create result records,
+implement assets, or promote lifecycle status until authorized.
 ```
 
 Milestone outputs:
@@ -192,4 +205,5 @@ Milestone outputs:
 ```text
 ai-engineering/milestones/MILESTONE-002/MILESTONE-002.md
 ai-engineering/milestones/MILESTONE-002/01-validation-experiment-framework.md
+ai-engineering/milestones/MILESTONE-002/02-stage-b1-first-experiment-selection.md
 ```
