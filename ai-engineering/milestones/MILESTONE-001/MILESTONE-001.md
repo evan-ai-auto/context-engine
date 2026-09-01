@@ -140,6 +140,7 @@ Completed Stages:
 - Stage D2A — CANDIDATE-001 Asset Design (COMPLETED)
 - Stage D2A Revision-001 — Validation Deferral Authority (COMPLETED)
 - Stage D2B — CANDIDATE-002 Asset Design (COMPLETED)
+- Stage D2B Revision-001 — Gate Requirement Boundary (COMPLETED)
 
 Current Stage:
 

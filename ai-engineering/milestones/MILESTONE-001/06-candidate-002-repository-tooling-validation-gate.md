@@ -244,6 +244,16 @@ This Skill must not become a Universal DevOps Agent.
 
 ## 7. Input Model
 
+Distinguish:
+
+```text
+Validation Requirement Context
+  What evidence / gates are required (External Authority / caller)
+
+Validation Execution Context
+  Repository context and constraints for how execution proceeds
+```
+
 ### Required Inputs
 
 ```text
@@ -262,8 +272,12 @@ Validation Target / Scope
 ### Optional Inputs
 
 ```text
+Required Gate Set
+  Conceptual mandatory gates from External Authority / caller
+  (abstract identities — e.g. Static Analysis — not shell commands)
+
 Requested Gate Set
-  Explicit gates requested by caller (abstract identities, not CLI)
+  Explicit gates requested by caller (may equal or refine Required Gate Set)
 
 Changed Artifact Context
   Summary of what changed (helps applicability / selection)
@@ -296,10 +310,10 @@ Caller MUST NOT be required to supply exact tool commands
   (pytest/ruff/mypy CLI strings) unless the repository’s own
   contract explicitly demands command-level override.
 
-Prefer abstract requests such as:
-  “Validate changed Python domain model”
+Prefer abstract requirements such as:
+  Required: Static Analysis
 over:
-  “python -m pytest tests/test_domain.py -q”
+  Required: mypy src/
 
 Exact commands belong to validation execution logic after inspection.
 ```
@@ -309,37 +323,84 @@ Exact commands belong to validation execution logic after inspection.
 ## 8. Validation Authority Model
 
 ```text
-Caller / Upstream Asset / External Authority
+Validation Requirement
         │
-        │ Determines validation requirement
-        │ (and deferral authorization when needed)
+        │ External Authority
+        ▼
+Required Gate Set
+        │
         ▼
 CANDIDATE-002
         │
-        │ Owns
+        │ Inspect Repository Context
         ▼
-Validation Execution
+Gate Resolution
         │
-        ▼
-Validation Evidence
+        ├─────────────────┐
+        │                 │
+        ▼                 ▼
+Executable         Not Executable
+        │                 │
+        ▼                 ▼
+Execute          ERROR / NOT_EXECUTED
+        │                 │
+        └────────┬────────┘
+                 ▼
+         Validation Evidence
+                 │
+                 ▼
+        External Acceptance
 ```
 
-### Owns
+### Authority matrix
+
+| Responsibility | Authority |
+|---|---|
+| Validation Required? | External Authority |
+| Required Gate Set | External Authority |
+| Repository Inspection | CANDIDATE-002 |
+| Gate Resolution (applicability / executability) | CANDIDATE-002 |
+| Gate Execution | CANDIDATE-002 |
+| Evidence Reporting | CANDIDATE-002 |
+| Partial Acceptance | External Authority |
+| Validation Deferral | External Authority |
+
+### Required Gate Authority
 
 ```text
-How requested validation is executed within repository-aware boundaries
+External Authority determines which gates are required.
 
-Gate resolution and execution
+CANDIDATE-002 determines how those gates can be resolved and executed.
+
+CANDIDATE-002 must not redefine the Required Gate Set.
+```
+
+### Owns (CANDIDATE-002)
+
+```text
+Repository inspection
+
+Gate applicability inspection
+
+Executable gate resolution
+
+How requested/required gates are executed within repository-aware boundaries
 
 Evidence collection and result normalization
 
-Reporting facts about what ran and what results occurred
+Reporting facts about what ran / could not run and why
 ```
 
 ### Does NOT own
 
 ```text
 Whether validation is required
+
+Which gates are mandatory (Required Gate Set)
+
+Whether a required gate may be removed or downgraded
+
+Whether a missing tool makes a required gate optional
 
 Whether validation may be deferred
 
@@ -351,18 +412,72 @@ Whether a revision or task may be marked complete
 Alignment with CANDIDATE-001 Revision-001:
 
 ```text
-CANDIDATE-001: requirement determination
-CANDIDATE-002: execution
-External Authority: deferral / acceptance of incomplete evidence
+CANDIDATE-001: validation necessity determination (may REQUEST this Skill)
+CANDIDATE-002: execution / resolution / evidence
+External Authority: Required Gate Set, deferral, incomplete-acceptance
+```
+
+```text
+Required Gate + Not Executable ≠ Gate Removed
+Required Gate + Not Executable = Explicit Validation Evidence
 ```
 
 ---
 
 ## 9. Gate Selection Model
 
+Explicitly distinguish:
+
+```text
+Required Gate Set
+  Mandated by External Authority / caller requirement context
+
+Applicable Gate Set
+  After repository inspection: which required/requested gates apply
+
+Executable Gate Set
+  Subset that can currently be executed in this environment
+```
+
+### Conceptual flow
+
+```text
+Required Gate Set
+        │
+        ▼
+Repository Inspection
+        │
+        ▼
+Applicability Evaluation
+        │
+        ├── Applicable
+        │
+        └── Not Applicable
+                 │
+                 ▼
+          Explicit Evidence (NOT_APPLICABLE)
+                 │
+                 │  (still reported — not silently removed)
+        ▼
+Executable Resolution
+        │
+        ├── Executable
+        │        │
+        │        ▼
+        │     Execute → PASSED / FAILED
+        │
+        └── Not Executable
+                 │
+                 ▼
+          ERROR / NOT_EXECUTED
+          (requirement preserved; not downgraded to optional)
+```
+
 ### Gate Selection Inputs
 
 ```text
+Required Gate Set (External Authority / caller)
+
 Explicit Requested Gate Set (if provided)
 
 Repository Convention (discovered)
@@ -374,31 +489,38 @@ Validation Capability inventory (what can be run here)
 Declared Policy hints (if supplied)
 ```
 
-### Gate Selection Authority
+### Gate Selection / Resolution Authority
 
 ```text
-CANDIDATE-002 resolves the executable gate set for THIS request
+CANDIDATE-002 resolves applicability and executability for THIS request
 using discoverable repository evidence + request constraints.
 
 CANDIDATE-002 does not invent tools unsupported by repository evidence.
+
+CANDIDATE-002 does not remove, redefine, or silently drop Required gates.
 ```
 
-### Gate Selection Precedence
+### Gate Selection Precedence (for resolving how to run)
+
+When External Authority has supplied a Required Gate Set, those gates
+remain in the evidence set. Precedence below guides **resolution/execution**,
+not **requirement redefinition**:
 
 ```text
-1. Explicit Request
-   If caller names gates, attempt those first (subject to supportability)
+1. Explicit Request / Required Gate Set identities
+   Attempt to resolve each required/requested gate
 
 2. Repository Convention
-   Documented / configured standard gates for the repo
+   How to map abstract gate identities to repo-supported tooling
 
 3. Change-Type Inference
    Narrow applicability from Validation Target / changed artifacts
-   (must not invent unrelated ecosystems)
+   (must not invent unrelated ecosystems; must not erase required gates)
 
 4. Default Gate Set
-   Only if convention + inference yield an empty set AND repository
-   evidence supports a documented default for this project type
+   Only when no Required/Requested set is supplied AND convention +
+   inference yield an empty set AND repository evidence supports a
+   documented default for this project type
 ```
 
 ```text
@@ -406,17 +528,21 @@ Do not randomly invent tools.
 Operate on discoverable repository evidence.
 ```
 
-### Unsupported Gate Behavior
+### Unsupported / Not Executable Gate Behavior
 
 ```text
-If an explicitly requested gate cannot be resolved or executed:
+If a required or explicitly requested gate cannot be resolved or executed:
   Result for that gate = ERROR or NOT_EXECUTED
-  (not silently FAILED)
+  (not silently FAILED; not omitted)
 
 Do not substitute a different tool without recording that the
-requested gate was unsupported.
+required/requested gate was unsupported.
 
-Do not drop the requested gate from the report.
+Do not drop the required/requested gate from the report.
+
+Not Executable must not cause:
+  Required Gate → Optional Gate
+without External Authority.
 ```
 
 ---
@@ -427,6 +553,29 @@ Do not drop the requested gate from the report.
 
 ```text
 Inspect Before Execute
+```
+
+Inspection must support two distinct questions:
+
+```text
+Gate Applicability
+  Does this repository / target support this validation gate conceptually?
+
+Gate Executability
+  Can this validation gate currently be executed in this environment?
+```
+
+Example:
+
+```text
+Static Analysis
+  Repository supports: YES
+  Tool currently available: NO
+
+→ Applicable + Not Executable
+→ ERROR or NOT_EXECUTED evidence
+
+Must NOT collapse into NOT_APPLICABLE.
 ```
 
 ### Inspection scope (bounded to validation needs)
@@ -441,6 +590,7 @@ Linting / Static Analysis signals
 Existing Validation Scripts
 Repository Documentation (dev/test instructions)
 CI Configuration (as hints only — not orchestration ownership)
+Tool presence / environment readiness (executability signals)
 ```
 
 ### Non-assumptions
@@ -450,8 +600,9 @@ Do NOT assume every repository uses pytest / ruff / mypy.
 
 Do NOT design an exhaustive repository detection engine.
 
-Inspection is sufficient when it can resolve applicable gates
-or explain why gates cannot be executed.
+Inspection is sufficient when it can:
+  - evaluate applicability of required/requested gates, and
+  - explain executability (or why execution cannot proceed)
 ```
 
 ---
@@ -497,8 +648,9 @@ Request → Immediately run commands
 Conceptual gate structure (not classes / JSON schemas):
 
 ```text
-Gate Identity
+Gate Identity / Requirement Identity
   Stable abstract id (e.g. unit-test, lint, static-analysis, hygiene)
+  Preserved even when not executable
 
 Purpose
   What quality property is being checked
@@ -506,14 +658,15 @@ Purpose
 Applicability
   Whether this gate applies to the current target/repo
 
-Execution Requirement
-  What is needed to run (tooling present, config, environment)
+Executability
+  Whether this gate can currently be executed
+  (tooling present, config, environment)
 
-Result
-  Normalized gate result (§13)
+Execution Result
+  Normalized gate result (§13) when executed
 
 Evidence
-  Why the result was produced (§15)
+  Why the result was produced (§15) — including why not executed
 ```
 
 A gate may conceptually represent:
@@ -529,6 +682,7 @@ Repository Consistency Check (e.g. whitespace / diff hygiene)
 ```text
 A gate is not necessarily a CLI command.
 Multiple repository ecosystems must be representable.
+Requirement identity survives non-execution.
 ```
 
 ---
@@ -539,29 +693,41 @@ Per-gate normalized results:
 
 ```text
 PASSED
-  Gate executed; validation criteria met
+  Applicable + Executable + criteria met
 
 FAILED
-  Gate executed successfully; validation criteria not met
+  Applicable + Executable + criteria not met
+  (gate ran successfully; validation criteria failed)
 
 ERROR
-  Gate could not be correctly executed
+  Applicable + Not Executable, or execution could not complete correctly
   (missing tool, invalid environment, crash, unresolved gate)
 
 NOT_APPLICABLE
-  Gate does not apply to this repository / target
-  (resolved as inapplicable — not a failure)
+  Not Applicable for this repository / target
+  (explicit evidence — not a silent removal)
 
 NOT_EXECUTED
-  Gate was selected or requested but not run
-  (blocked, skipped by constraint, interrupted)
+  Gate was required/selected but not run
+  (blocked, interrupted, constraint) — distinct from FAILED
+```
+
+Mapping summary:
+
+```text
+Applicable + Executable + Criteria Pass  → PASSED
+Applicable + Executable + Criteria Fail  → FAILED
+Applicable + Not Executable              → ERROR or NOT_EXECUTED
+Not Applicable                           → NOT_APPLICABLE
 ```
 
 ```text
 FAILED ≠ ERROR
 NOT_APPLICABLE ≠ NOT_EXECUTED
+NOT_APPLICABLE ≠ silently removed
 
 Do not collapse all non-success into FAILED.
+Result semantics must preserve why a gate did not produce PASS/FAIL.
 ```
 
 ---
@@ -571,6 +737,7 @@ Do not collapse all non-success into FAILED.
 ### Aggregate Outcome Rules
 
 Preserve per-gate evidence always. Aggregate is a summary, not a cover-up.
+CANDIDATE-002 reports **Aggregate Validation Evidence**, not an acceptance decision.
 
 ```text
 All Applicable Gates Passed
@@ -581,17 +748,27 @@ Any Applicable Gate Failed
   → aggregate: FAILED
   (at least one FAILED among applicable executed gates)
 
-Any Required Gate Error
+Any Required Gate Error / Not Executable
   → aggregate: ERROR
-  (required gate could not execute; do not call this FAILED)
+  (required gate could not execute; do not call this FAILED;
+   do not call overall PASSED)
 
-Requested Gate Not Executed
+Required / Requested Gate Not Executed
   → aggregate: ERROR or NOT_EXECUTED
   (explicitly reported; not silent success)
 
 Only Not Applicable Remain
   → aggregate: NOT_APPLICABLE
-  (no applicable gates for target; report why)
+  (no applicable gates for target; report why —
+   required gates that are N/A still appear as evidence)
+```
+
+Forbidden without External Authority acceptance:
+
+```text
+Required Gate ERROR
++ Other Gates PASSED
+= Overall PASSED
 ```
 
 Mixed example:
@@ -599,17 +776,17 @@ Mixed example:
 ```text
 Unit Tests: PASSED
 Lint: PASSED
-Static Analysis: ERROR
+Static Analysis: ERROR   (required, applicable, not executable)
 
 Aggregate: ERROR
 Evidence: retain all three gate records
 Do NOT report “overall completed / success”
-Do NOT invent PARTIAL_SUCCESS unless a future policy defines it
-  and External Authority interprets it — not this Skill’s job
+Do NOT invent PARTIAL_SUCCESS unless External Authority interprets it
 ```
 
 ```text
-One failing or errored gate must remain visible in evidence.
+A required gate that cannot be executed remains visible in aggregate results.
+One failing or errored required gate must remain visible in evidence.
 ```
 
 ---
@@ -706,6 +883,9 @@ Gate Cannot Be Resolved
 Required Tool Missing
 Execution Environment Invalid
 Gate Execution Error
+
+Required Gate + Not Executable
+  (tool missing / environment invalid / unresolved mapping)
 ```
 
 ### Outcomes
@@ -713,9 +893,10 @@ Gate Execution Error
 ```text
 ERROR
   Could not correctly execute one or more required/resolvable gates
+  (including Required + Not Executable)
 
 NOT_EXECUTED
-  Selected/requested gates not run due to stop/constraint
+  Selected/required gates not run due to stop/constraint
 
 BLOCKED
   Cannot proceed with meaningful validation (e.g. no repo context)
@@ -726,12 +907,25 @@ ESCALATED
 ```
 
 ```text
+Required Gate + Not Executable
+→ ERROR / NOT_EXECUTED / BLOCKED
+≠ FAILED
+(because validation criteria may never have been evaluated)
+
+Required Gate + Missing Tool
+≠ Gate Removed
+
+Validation Requirement is preserved even when execution fails.
+```
+
+```text
 Validation failed (FAILED)
 ≠
 Validation could not be executed (ERROR / NOT_EXECUTED / BLOCKED)
 ```
 
 Stop after reporting; do not loop into tool installation or redesign.
+Do not silently continue by dropping required gates.
 
 ---
 
@@ -748,7 +942,10 @@ Repository Tooling Validation Execution
 ```text
 Repository context inspection (validation-bounded)
 
-Applicable gate resolution
+Gate applicability inspection
+
+Executable gate resolution
+  (repository-aware execution resolution)
 
 Validation execution
 
@@ -764,9 +961,17 @@ Validation reporting
 ```text
 Revision planning / revision execution (CANDIDATE-001)
 
+Required Gate Definition
+
+Required Gate Removal
+
+Required Gate Downgrade
+
 Validation requirement policy
 
 Validation deferral authorization
+
+Partial validation acceptance
 
 Task completion decision
 
@@ -778,6 +983,9 @@ Repository refactoring
 ```
 
 ```text
+CANDIDATE-002 owns repository-aware execution resolution.
+CANDIDATE-002 does not own validation requirement redefinition.
+
 Compatible with:
 CANDIDATE-001 REQUESTS CANDIDATE-002
 ```
@@ -943,12 +1151,12 @@ Framework vocabulary only (`04-candidate-design-framework.md`):
 | Identity Clarity | Clear |
 | Trigger Clarity | Clear |
 | Input Clarity | Clear (abstract request contract) |
-| Gate Selection Model | Defined with precedence |
-| Repository Inspection Model | Bounded; inspect-before-execute |
+| Gate Selection Model | Required vs Applicable vs Executable separated |
+| Repository Inspection Model | Applicability ≠ Executability |
 | Result Model | PASSED/FAILED/ERROR/NOT_APPLICABLE/NOT_EXECUTED |
-| Evidence Model | Defined |
-| Responsibility Boundary | Clear vs CANDIDATE-001 / External Authority |
-| Failure Model | Explicit |
+| Evidence Model | Defined; required gates preserved when not executable |
+| Responsibility Boundary | Clear vs External Authority / CANDIDATE-001 |
+| Failure Model | Explicit; Required+Not Executable ≠ FAILED/removed |
 
 ### Readiness
 
@@ -962,9 +1170,11 @@ Reasons:
 
 ```text
 Design is reviewable and implementation-neutral.
+Required Gate Authority vs Gate Resolution Authority is now explicit.
 
 Still requires before READY_FOR_IMPLEMENTATION:
   - concrete repository-convention discovery rules per ecosystem
+  - how Required Gate Set is supplied by callers/policies in practice
   - default gate-set policies for this repo (without hard-coding globally)
   - evidence reference storage conventions
   - integration test plan with CANDIDATE-001 request interface
@@ -1011,32 +1221,32 @@ Primary Purpose:
 ### Gate model summary
 
 ```text
-Selection precedence:
-  Explicit Request → Repository Convention → Change-Type Inference → Default
+Required Gate Set (External Authority)
+  ↓ Applicable? → NOT_APPLICABLE (explicit)
+  ↓ Executable? → ERROR / NOT_EXECUTED if no
+  ↓ Execute → PASSED / FAILED
 
-Inspection:
-  Bounded inspect-before-execute (language/tools/scripts/docs/CI hints)
-
-Unsupported gates:
-  ERROR / NOT_EXECUTED — never silent substitution or silent omit
+Selection/resolution uses repository convention mapping
+but must not redefine or silently drop Required gates.
 ```
 
 ### Result model summary
 
 ```text
 PASSED / FAILED / ERROR / NOT_APPLICABLE / NOT_EXECUTED
-Aggregate preserves evidence; ERROR ≠ FAILED; no silent overall success
+Required + execution problem remains visible in aggregate (≠ overall PASSED)
 ```
 
 ### Authority boundary
 
 ```text
-External Authority / Caller:
-  Determines whether validation is required
-  Determines whether incomplete validation is acceptable / deferrable
+External Authority:
+  Defines required validation and required gates
+  Determines whether incomplete validation is acceptable
 
 CANDIDATE-002:
-  Executes requested validation
+  Inspects repository context and resolves how required gates execute
+  Does not remove or downgrade required gates
   Reports normalized evidence
 ```
 
