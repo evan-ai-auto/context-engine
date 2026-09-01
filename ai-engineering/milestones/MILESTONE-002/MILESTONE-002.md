@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage C2 Revision-001 — Validation Dependency Attribution Correction
+Stage C3 — EXP-M2-002 Evidence & Assessment
 Status: COMPLETED
 
 Completed Stages:
@@ -185,6 +185,7 @@ Completed Stages:
 - Stage C1 — Evidence Gap Analysis & Second Experiment Selection
 - Stage C2 — EXP-M2-002 Experimental Invocation
 - Stage C2 Revision-001 — Validation Dependency Attribution Correction
+- Stage C3 — EXP-M2-002 Evidence & Assessment
 
 Experiment EXP-M2-001:
 Single Asset — CANDIDATE-001
@@ -197,16 +198,20 @@ Task: Domain Enum Entity-Level Test Plan Completion
 Invocation: COMPLETED (execution + evidence capture)
 Record correction: C2 Revision-001 — validation dependency attribution (docs only)
 Target Modified: Yes (tests/domain/ — 4 entity test modules; T-04–T-07)
-Assessment: Deferred to Stage C3
+Assessment: COMPLETED
+Outcome: MIXED EVIDENCE
+
+Cross-Experiment Synthesis:
+NOT YET PERFORMED
 
 Asset Lifecycle Status (unchanged):
 CANDIDATE-001 remains VALIDATION_READY (not VALIDATED)
 
 Recommended Next Step (pending authorization):
-Stage C3 — EXP-M2-002 Evidence & Assessment
+Stage D — Cross-Experiment Synthesis & Evidence Review
 
 Do not perform final asset assessment, promote lifecycle status,
-implement assets, or start cross-experiment review until authorized.
+implement assets, or make portfolio disposition until authorized.
 ```
 
 Milestone outputs:
@@ -219,4 +224,5 @@ ai-engineering/milestones/MILESTONE-002/03-stage-b2-exp-m2-001-experimental-invo
 ai-engineering/milestones/MILESTONE-002/04-stage-b3-exp-m2-001-evidence-and-assessment.md
 ai-engineering/milestones/MILESTONE-002/05-stage-c1-evidence-gap-and-second-experiment-selection.md
 ai-engineering/milestones/MILESTONE-002/06-stage-c2-exp-m2-002-experimental-invocation.md
+ai-engineering/milestones/MILESTONE-002/07-stage-c3-exp-m2-002-evidence-and-assessment.md
 ```
