@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage C1 — Evidence Gap Analysis & Second Experiment Selection
+Stage C2 — EXP-M2-002 Experimental Invocation
 Status: COMPLETED
 
 Completed Stages:
@@ -183,6 +183,7 @@ Completed Stages:
 - Stage B2 — EXP-M2-001 Experimental Invocation
 - Stage B3 — EXP-M2-001 Evidence & Assessment
 - Stage C1 — Evidence Gap Analysis & Second Experiment Selection
+- Stage C2 — EXP-M2-002 Experimental Invocation
 
 Experiment EXP-M2-001:
 Single Asset — CANDIDATE-001
@@ -190,20 +191,20 @@ Task: Post-closeout Future Transition Pointer Hygiene
 Outcome: MIXED EVIDENCE (assessment complete)
 
 Experiment EXP-M2-002:
-SELECTED — NOT EXECUTED
 Single Asset — CANDIDATE-001
 Task: Domain Enum Entity-Level Test Plan Completion
-Selection rationale: contrast vs M2-001 (test/code, medium complexity,
-boundary discovery, pytest validation)
+Invocation: COMPLETED (execution + evidence capture)
+Target Modified: Yes (tests/domain/ — 4 entity test modules; T-04–T-07)
+Assessment: Deferred to Stage C3
 
 Asset Lifecycle Status (unchanged):
 CANDIDATE-001 remains VALIDATION_READY (not VALIDATED)
 
 Recommended Next Step (pending authorization):
-Stage C2 — EXP-M2-002 Experimental Invocation
+Stage C3 — EXP-M2-002 Evidence & Assessment
 
-Do not execute EXP-M2-002, promote lifecycle status, implement assets,
-or make final asset disposition until authorized.
+Do not perform final asset assessment, promote lifecycle status,
+implement assets, or start cross-experiment review until authorized.
 ```
 
 Milestone outputs:
@@ -215,4 +216,5 @@ ai-engineering/milestones/MILESTONE-002/02-stage-b1-first-experiment-selection.m
 ai-engineering/milestones/MILESTONE-002/03-stage-b2-exp-m2-001-experimental-invocation.md
 ai-engineering/milestones/MILESTONE-002/04-stage-b3-exp-m2-001-evidence-and-assessment.md
 ai-engineering/milestones/MILESTONE-002/05-stage-c1-evidence-gap-and-second-experiment-selection.md
+ai-engineering/milestones/MILESTONE-002/06-stage-c2-exp-m2-002-experimental-invocation.md
 ```

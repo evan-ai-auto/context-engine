@@ -37,3 +37,9 @@ def test_module_invalid_type_fails() -> None:
         Module.model_validate(
             {"name": "a", "path": "a", "type": "not-a-module-type"}
         )
+
+
+@pytest.mark.parametrize("module_type", list(ModuleType))
+def test_module_accepts_each_frozen_module_type(module_type: ModuleType) -> None:
+    module = Module(name="mod", path="mods/mod", type=module_type)
+    assert module.type is module_type

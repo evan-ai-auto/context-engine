@@ -44,3 +44,9 @@ def test_dependency_invalid_scope_fails() -> None:
                 "scope": "compileOnly",
             }
         )
+
+
+@pytest.mark.parametrize("scope", list(DependencyScope))
+def test_dependency_accepts_each_frozen_scope(scope: DependencyScope) -> None:
+    dep = Dependency(name="pkg", ecosystem="PyPI", scope=scope)
+    assert dep.scope is scope

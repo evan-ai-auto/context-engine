@@ -53,3 +53,16 @@ def test_analysis_status_invalid_rejected() -> None:
                 "analysis_status": "running",
             }
         )
+
+
+@pytest.mark.parametrize("status", list(AnalysisStatus))
+def test_metadata_accepts_each_frozen_analysis_status(
+    status: AnalysisStatus,
+) -> None:
+    meta = GenerationMetadata(
+        engine_version="0.1.0",
+        schema_version="1.0",
+        generated_at=datetime(2026, 8, 31, 12, 0, tzinfo=timezone.utc),
+        analysis_status=status,
+    )
+    assert meta.analysis_status is status
