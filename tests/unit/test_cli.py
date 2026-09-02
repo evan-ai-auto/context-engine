@@ -23,5 +23,5 @@ def test_cli_version() -> None:
 
 def test_cli_init_placeholder() -> None:
     result = runner.invoke(app, ["init"])
-    assert result.exit_code == 0
+    assert result.exit_code == 1
     assert "not implemented" in result.stdout.lower()

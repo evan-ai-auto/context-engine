@@ -40,6 +40,7 @@ def init_command() -> None:
         "Initialization is not implemented yet. "
         "This is a placeholder from TASK-001 project setup."
     )
+    raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":

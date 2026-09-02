@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage E — Evidence Sufficiency & Asset Disposition Review
+Stage F — EXP-M2-003 Invocation & Evidence Capture
 Status: COMPLETED
 
 Completed Stages:
@@ -188,6 +188,7 @@ Completed Stages:
 - Stage C3 — EXP-M2-002 Evidence & Assessment
 - Stage D — Cross-Experiment Evidence Synthesis
 - Stage E — Evidence Sufficiency & Asset Disposition Review
+- Stage F — EXP-M2-003 Invocation & Evidence Capture
 
 Experiment EXP-M2-001:
 Single Asset — CANDIDATE-001
@@ -197,40 +198,45 @@ Outcome: MIXED EVIDENCE (assessment complete)
 Experiment EXP-M2-002:
 Single Asset — CANDIDATE-001
 Task: Domain Enum Entity-Level Test Plan Completion
-Invocation: COMPLETED (execution + evidence capture)
-Record correction: C2 Revision-001 — validation dependency attribution (docs only)
-Target Modified: Yes (tests/domain/ — 4 entity test modules; T-04–T-07)
 Assessment: COMPLETED
 Outcome: MIXED EVIDENCE
 
-Evidence Base:
-Cross-Experiment Synthesis COMPLETED
+Experiment EXP-M2-003:
+Primary Subject — CANDIDATE-001
+Supporting Capability — CANDIDATE-002
+Task: CLI Init Placeholder Exit-Code Contract Correction
+Target Modified: Yes (src/ai_context/cli/main.py; tests/unit/test_cli.py)
+Validation Requirement: YES
+CANDIDATE-002 Requested: YES (VR-M2-003-001)
+CANDIDATE-002 Invoked: SUCCEEDED (design-doc experimental procedure)
+Evidence Consumed: CONSUMED
+Dependency Gap Closure: PARTIALLY_CLOSED
+Experiment Outcome: SUCCESS
+Failure Recovery: NOT TESTED
+Assessment of disposition impact: Deferred to later review stage
 
-Combined Evidence Pattern:
-MIXED EVIDENCE
+Evidence Base:
+Cross-Experiment Synthesis COMPLETED (Stage D)
+Stage E Disposition: PROMOTE_WITH_CONDITIONS (unchanged)
+Stage F adds dependency-path evidence (happy path)
 
 Evidence Sufficiency (Stage E):
-SUFFICIENT_WITH_LIMITATIONS
+SUFFICIENT_WITH_LIMITATIONS (unchanged by Stage F)
 
 Asset Disposition (Stage E):
-PROMOTE_WITH_CONDITIONS
+PROMOTE_WITH_CONDITIONS (unchanged — Stage F does not re-decide)
 
-Lifecycle Transition (Stage E):
-CANDIDATE-001: VALIDATION_READY → CONDITIONALLY_VALIDATED
-
-Remaining Critical Gap:
-CANDIDATE-001 → CANDIDATE-002 dependency REQUEST/invocation untested
-
-Follow-Up Validation:
-EXP-M2-003 proposed (NOT EXECUTED) — dependency orchestration path
+Lifecycle Status:
+CANDIDATE-001 remains CONDITIONALLY_VALIDATED
+(not promoted to VALIDATED by Stage F)
 
 Packaging:
-NONE — SKILL.md / IMPLEMENTATION_READY not authorized by Stage E
+NONE
 
 Recommended Next Step (pending authorization):
-Either (a) EXP-M2-003 dependency-path validation, or
-(b) Portfolio / packaging readiness review under Stage E conditions,
-without treating CONDITIONALLY_VALIDATED as unconditional VALIDATED.
+EXP-M2-003 evidence assessment / disposition impact review
+(or failure-path / packaged-Skill follow-up experiments)
+without treating Stage F SUCCESS as unconditional VALIDATED.
 ```
 
 Milestone outputs:
@@ -246,4 +252,5 @@ ai-engineering/milestones/MILESTONE-002/06-stage-c2-exp-m2-002-experimental-invo
 ai-engineering/milestones/MILESTONE-002/07-stage-c3-exp-m2-002-evidence-and-assessment.md
 ai-engineering/milestones/MILESTONE-002/08-stage-d-cross-experiment-evidence-synthesis.md
 ai-engineering/milestones/MILESTONE-002/09-stage-e-evidence-sufficiency-and-asset-disposition.md
+ai-engineering/milestones/MILESTONE-002/10-stage-f-exp-m2-003-invocation-and-evidence-capture.md
 ```
