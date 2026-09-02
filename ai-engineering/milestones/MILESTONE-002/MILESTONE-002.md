@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage G — EXP-M2-003 Evidence Assessment & Candidate-001 Lifecycle Reassessment
+Stage H — EXP-M2-004 Failure/ERROR-Path Composition Test
 Status: COMPLETED
 
 Completed Stages:
@@ -190,6 +190,7 @@ Completed Stages:
 - Stage E — Evidence Sufficiency & Asset Disposition Review
 - Stage F — EXP-M2-003 Invocation & Evidence Capture
 - Stage G — EXP-M2-003 Evidence Assessment & Candidate-001 Lifecycle Reassessment
+- Stage H — EXP-M2-004 Failure/ERROR-Path Composition Test
 
 Experiment EXP-M2-001:
 Outcome: MIXED EVIDENCE (assessment complete)
@@ -198,26 +199,34 @@ Experiment EXP-M2-002:
 Outcome: MIXED EVIDENCE (assessment complete)
 
 Experiment EXP-M2-003:
-Outcome: SUCCESS (invocation complete)
-Dependency Gap Closure: PARTIALLY_CLOSED (confirmed in Stage G)
-Assessment: COMPLETED (Stage G)
+Outcome: SUCCESS — happy-path dependency composition
+Dependency Gap Closure: PARTIALLY_CLOSED (confirmed Stage G)
 
-Stage G Assessment:
-CANDIDATE-001 Lifecycle: CONDITIONALLY_VALIDATED (RETAINED)
-Stage E Disposition: PROMOTE_WITH_CONDITIONS (RETAINED; conditions recalibrated)
-Dependency Composition: HAPPY_PATH_OBSERVED / FAILURE_PATH_NOT_ESTABLISHED
-Packaging Readiness: NOT_READY
-CANDIDATE-002 Independent Status: VALIDATION_READY (not independently validated)
+Experiment EXP-M2-004:
+Outcome: SUCCESS — failure-path composition (gate FAILED → 001 BLOCKED)
+Controlled Failure: Unit Tests assertion mismatch (temporary; restored)
+Aggregate Validation: FAILED (then PASSED after remediation)
+CANDIDATE-001 Consumed Non-PASSED: YES
+Correct Non-Success Disposition: YES (BLOCKED; RESOLVED avoided)
+Recovery Observed: YES
+Failure Mode Validated: Validation Gate Failure only
+Engineering Product Delta: NONE (temporary defect not committed)
 
-Evidence Sufficiency (Stage E baseline):
-SUFFICIENT_WITH_LIMITATIONS — dependency happy path improved; failure path open
+Dependency Coverage:
+PREVIOUS: HAPPY_PATH_OBSERVED / FAILURE_PATH_NOT_ESTABLISHED
+CURRENT:  HAPPY_PATH_OBSERVED / FAILURE_PATH_OBSERVED (gate-failure mode)
+
+Lifecycle Status:
+CANDIDATE-001 remains CONDITIONALLY_VALIDATED (not auto-promoted)
+CANDIDATE-002 remains VALIDATION_READY
+Stage E Disposition: PROMOTE_WITH_CONDITIONS (unchanged category)
 
 Packaging:
-NONE
+NONE — both candidates NOT_READY
 
 Recommended Next Step (pending authorization):
-EXP-M2-004 — Failure/ERROR-path composition test (001 ← 002 non-PASSED evidence)
-without treating CONDITIONALLY_VALIDATED as VALIDATED or authorizing packaging.
+Packaging readiness review and/or packaged-Skill invocation experiment
+without treating EXP-M2-004 SUCCESS as unconditional VALIDATED.
 ```
 
 Milestone outputs:
@@ -235,4 +244,5 @@ ai-engineering/milestones/MILESTONE-002/08-stage-d-cross-experiment-evidence-syn
 ai-engineering/milestones/MILESTONE-002/09-stage-e-evidence-sufficiency-and-asset-disposition.md
 ai-engineering/milestones/MILESTONE-002/10-stage-f-exp-m2-003-invocation-and-evidence-capture.md
 ai-engineering/milestones/MILESTONE-002/11-stage-g-exp-m2-003-evidence-assessment-and-lifecycle-reassessment.md
+ai-engineering/milestones/MILESTONE-002/12-stage-h-exp-m2-004-failure-error-path-composition.md
 ```
