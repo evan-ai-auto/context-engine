@@ -174,50 +174,45 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage I — Evidence Consolidation & Packaging Readiness Review
+Stage J — EXP-M2-005 Minimal Packaged Skill Runtime Experiment
 Status: COMPLETED
 
 Completed Stages:
-- Stage A — Validation Experiment Framework
-- Stage B1 — First Experiment Selection & Definition
-- Stage B2 — EXP-M2-001 Experimental Invocation
-- Stage B3 — EXP-M2-001 Evidence & Assessment
-- Stage C1 — Evidence Gap Analysis & Second Experiment Selection
-- Stage C2 — EXP-M2-002 Experimental Invocation
-- Stage C2 Revision-001 — Validation Dependency Attribution Correction
-- Stage C3 — EXP-M2-002 Evidence & Assessment
-- Stage D — Cross-Experiment Evidence Synthesis
-- Stage E — Evidence Sufficiency & Asset Disposition Review
-- Stage F — EXP-M2-003 Invocation & Evidence Capture
-- Stage G — EXP-M2-003 Evidence Assessment & Candidate-001 Lifecycle Reassessment
-- Stage H — EXP-M2-004 Failure/ERROR-Path Composition Test
-- Stage I — Evidence Consolidation & Packaging Readiness Review
+- Stage A … Stage I (prior)
+- Stage J — EXP-M2-005 Minimal Packaged Skill Runtime Experiment
 
 Experiment EXP-M2-001: MIXED EVIDENCE
 Experiment EXP-M2-002: MIXED EVIDENCE
 Experiment EXP-M2-003: SUCCESS (happy-path dependency)
-Experiment EXP-M2-004: SUCCESS (failure-path gate FAILED → BLOCKED; recovery OBSERVED)
+Experiment EXP-M2-004: SUCCESS (failure-path gate FAILED → BLOCKED)
+Experiment EXP-M2-005: SUCCESS (packaged Skill runtime; core MATCHED)
 
-Stage I Decisions:
-CANDIDATE-001 VALIDATED = NO
-CANDIDATE-001 PACKAGING_READY = NO
+EXP-M2-005 Summary:
+Skill Runtime: LOADED
+Invocation: SUCCESS
+Bounded Revision: SUCCESS (CLI init message exit-status clarification)
+Boundary Preservation: MATCHED (Primary Target Only — main.py)
+Validation Requirement: OBSERVED (YES)
+Validation Request: OBSERVED (VR-M2-005-001)
+Evidence Consumption: OBSERVED (Aggregate PASSED)
+Disposition: RESOLVED
+Design-doc vs Packaged Runtime: MATCHED (happy path)
+Human Intervention: Normal judgment + Skill procedure application (not Fully Autonomous)
+
+Stage J Lifecycle Impact:
 CANDIDATE-001 Lifecycle = CONDITIONALLY_VALIDATED (RETAINED)
-CANDIDATE-002 Independent Validation Required = YES
-CANDIDATE-002 Lifecycle = VALIDATION_READY (RETAINED)
-Packaged Skill Runtime Experiment Required = YES
-Proposed Next Experiment = EXP-M2-005 (NOT EXECUTED)
+VALIDATED = NO
+PACKAGING_READY = YES (CONDITIONAL / EXPERIMENTAL)
+PACKAGED (production) = NO
+CANDIDATE-002 = VALIDATION_READY (unchanged)
 
-Dependency Coverage:
-HAPPY_PATH_OBSERVED
-FAILURE_PATH_OBSERVED (gate-failure mode)
-PACKAGED_RUNTIME_NOT_ESTABLISHED
-
-Packaging:
-NONE — no SKILL.md / WORKFLOW.md / Agent runtime created
+Experimental Package:
+ai-engineering/milestones/MILESTONE-002/packaged-runtime/
+  candidate-001-targeted-engineering-revision/SKILL.md
 
 Recommended Next Step (pending authorization):
-EXP-M2-005 — Minimal Packaged Skill Runtime Experiment for CANDIDATE-001
-without treating packaging as automatic VALIDATED promotion.
+Stage K lifecycle reassessment and/or EXP-M2-006 packaged failure-path test
+without treating EXP-M2-005 SUCCESS as unconditional VALIDATED or production PACKAGED.
 ```
 
 Milestone outputs:
@@ -237,4 +232,6 @@ ai-engineering/milestones/MILESTONE-002/10-stage-f-exp-m2-003-invocation-and-evi
 ai-engineering/milestones/MILESTONE-002/11-stage-g-exp-m2-003-evidence-assessment-and-lifecycle-reassessment.md
 ai-engineering/milestones/MILESTONE-002/12-stage-h-exp-m2-004-failure-error-path-composition.md
 ai-engineering/milestones/MILESTONE-002/13-stage-i-evidence-consolidation-and-packaging-readiness-review.md
+ai-engineering/milestones/MILESTONE-002/14-stage-j-exp-m2-005-packaged-skill-runtime-experiment.md
+ai-engineering/milestones/MILESTONE-002/packaged-runtime/candidate-001-targeted-engineering-revision/SKILL.md
 ```

@@ -37,7 +37,7 @@ def main(
 def init_command() -> None:
     """Initialize project context (not implemented yet)."""
     typer.echo(
-        "Initialization is not implemented yet. "
+        "Initialization is not implemented yet (exits with status 1). "
         "This is a placeholder from TASK-001 project setup."
     )
     raise typer.Exit(code=1)
