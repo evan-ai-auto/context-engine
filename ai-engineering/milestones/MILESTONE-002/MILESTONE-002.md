@@ -174,45 +174,46 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage J — EXP-M2-005 Minimal Packaged Skill Runtime Experiment
+Stage K — EXP-M2-006 Packaged Skill Failure-Path Composition Test
 Status: COMPLETED
 
 Completed Stages:
-- Stage A … Stage I (prior)
-- Stage J — EXP-M2-005 Minimal Packaged Skill Runtime Experiment
+- Stage A … Stage J (prior)
+- Stage K — EXP-M2-006 Packaged Skill Failure-Path Composition Test
 
 Experiment EXP-M2-001: MIXED EVIDENCE
 Experiment EXP-M2-002: MIXED EVIDENCE
 Experiment EXP-M2-003: SUCCESS (happy-path dependency)
-Experiment EXP-M2-004: SUCCESS (failure-path gate FAILED → BLOCKED)
-Experiment EXP-M2-005: SUCCESS (packaged Skill runtime; core MATCHED)
+Experiment EXP-M2-004: SUCCESS (design-doc failure-path FAILED → BLOCKED)
+Experiment EXP-M2-005: SUCCESS (packaged Skill happy path PASSED → RESOLVED)
+Experiment EXP-M2-006: SUCCESS (packaged Skill failure-path FAILED → BLOCKED)
 
-EXP-M2-005 Summary:
-Skill Runtime: LOADED
-Invocation: SUCCESS
-Bounded Revision: SUCCESS (CLI init message exit-status clarification)
-Boundary Preservation: MATCHED (Primary Target Only — main.py)
-Validation Requirement: OBSERVED (YES)
-Validation Request: OBSERVED (VR-M2-005-001)
-Evidence Consumption: OBSERVED (Aggregate PASSED)
-Disposition: RESOLVED
-Design-doc vs Packaged Runtime: MATCHED (happy path)
-Human Intervention: Normal judgment + Skill procedure application (not Fully Autonomous)
+Stage J vs Stage K:
+Stage J: Packaged happy path (Aggregate PASSED → RESOLVED)
+Stage K: Packaged failure path (Aggregate FAILED → BLOCKED; recovery OBSERVED)
 
-Stage J Lifecycle Impact:
-CANDIDATE-001 Lifecycle = CONDITIONALLY_VALIDATED (RETAINED)
+EXP-M2-006 Summary:
+Packaged Skill execution object: OBSERVED
+Validation Requirement: YES
+Validation Request: VR-M2-006-001
+Gate Failure: Unit Tests FAILED (assertion mismatch; temporary; restored)
+Aggregate Validation Evidence: FAILED
+Evidence Consumption: OBSERVED
+Disposition: BLOCKED
+RESOLVED During Failure: NO
+Recovery: OBSERVED → Post-Recovery Aggregate PASSED
+Design-doc vs Packaged Failure Path: MATCHED (gate-failure mode)
+
+Lifecycle Status (unchanged by Stage K experiment):
+CANDIDATE-001 = CONDITIONALLY_VALIDATED
 VALIDATED = NO
 PACKAGING_READY = YES (CONDITIONAL / EXPERIMENTAL)
 PACKAGED (production) = NO
-CANDIDATE-002 = VALIDATION_READY (unchanged)
+CANDIDATE-002 = VALIDATION_READY
 
-Experimental Package:
-ai-engineering/milestones/MILESTONE-002/packaged-runtime/
-  candidate-001-targeted-engineering-revision/SKILL.md
-
-Recommended Next Step (pending authorization):
-Stage K lifecycle reassessment and/or EXP-M2-006 packaged failure-path test
-without treating EXP-M2-005 SUCCESS as unconditional VALIDATED or production PACKAGED.
+Recommended Next Step (pending authorization / review):
+Lifecycle reassessment after packaged happy+failure evidence
+without treating EXP-M2-006 SUCCESS as automatic VALIDATED.
 ```
 
 Milestone outputs:
@@ -233,5 +234,6 @@ ai-engineering/milestones/MILESTONE-002/11-stage-g-exp-m2-003-evidence-assessmen
 ai-engineering/milestones/MILESTONE-002/12-stage-h-exp-m2-004-failure-error-path-composition.md
 ai-engineering/milestones/MILESTONE-002/13-stage-i-evidence-consolidation-and-packaging-readiness-review.md
 ai-engineering/milestones/MILESTONE-002/14-stage-j-exp-m2-005-packaged-skill-runtime-experiment.md
+ai-engineering/milestones/MILESTONE-002/15-stage-k-exp-m2-006-packaged-skill-failure-path.md
 ai-engineering/milestones/MILESTONE-002/packaged-runtime/candidate-001-targeted-engineering-revision/SKILL.md
 ```

@@ -35,7 +35,7 @@ def main(
 
 @app.command("init")
 def init_command() -> None:
-    """Initialize project context (not implemented yet)."""
+    """Initialize project context (not implemented yet; exits with status 1)."""
     typer.echo(
         "Initialization is not implemented yet (exits with status 1). "
         "This is a placeholder from TASK-001 project setup."
