@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage H — EXP-M2-004 Failure/ERROR-Path Composition Test
+Stage I — Evidence Consolidation & Packaging Readiness Review
 Status: COMPLETED
 
 Completed Stages:
@@ -191,42 +191,33 @@ Completed Stages:
 - Stage F — EXP-M2-003 Invocation & Evidence Capture
 - Stage G — EXP-M2-003 Evidence Assessment & Candidate-001 Lifecycle Reassessment
 - Stage H — EXP-M2-004 Failure/ERROR-Path Composition Test
+- Stage I — Evidence Consolidation & Packaging Readiness Review
 
-Experiment EXP-M2-001:
-Outcome: MIXED EVIDENCE (assessment complete)
+Experiment EXP-M2-001: MIXED EVIDENCE
+Experiment EXP-M2-002: MIXED EVIDENCE
+Experiment EXP-M2-003: SUCCESS (happy-path dependency)
+Experiment EXP-M2-004: SUCCESS (failure-path gate FAILED → BLOCKED; recovery OBSERVED)
 
-Experiment EXP-M2-002:
-Outcome: MIXED EVIDENCE (assessment complete)
-
-Experiment EXP-M2-003:
-Outcome: SUCCESS — happy-path dependency composition
-Dependency Gap Closure: PARTIALLY_CLOSED (confirmed Stage G)
-
-Experiment EXP-M2-004:
-Outcome: SUCCESS — failure-path composition (gate FAILED → 001 BLOCKED)
-Controlled Failure: Unit Tests assertion mismatch (temporary; restored)
-Aggregate Validation: FAILED (then PASSED after remediation)
-CANDIDATE-001 Consumed Non-PASSED: YES
-Correct Non-Success Disposition: YES (BLOCKED; RESOLVED avoided)
-Recovery Observed: YES
-Failure Mode Validated: Validation Gate Failure only
-Engineering Product Delta: NONE (temporary defect not committed)
+Stage I Decisions:
+CANDIDATE-001 VALIDATED = NO
+CANDIDATE-001 PACKAGING_READY = NO
+CANDIDATE-001 Lifecycle = CONDITIONALLY_VALIDATED (RETAINED)
+CANDIDATE-002 Independent Validation Required = YES
+CANDIDATE-002 Lifecycle = VALIDATION_READY (RETAINED)
+Packaged Skill Runtime Experiment Required = YES
+Proposed Next Experiment = EXP-M2-005 (NOT EXECUTED)
 
 Dependency Coverage:
-PREVIOUS: HAPPY_PATH_OBSERVED / FAILURE_PATH_NOT_ESTABLISHED
-CURRENT:  HAPPY_PATH_OBSERVED / FAILURE_PATH_OBSERVED (gate-failure mode)
-
-Lifecycle Status:
-CANDIDATE-001 remains CONDITIONALLY_VALIDATED (not auto-promoted)
-CANDIDATE-002 remains VALIDATION_READY
-Stage E Disposition: PROMOTE_WITH_CONDITIONS (unchanged category)
+HAPPY_PATH_OBSERVED
+FAILURE_PATH_OBSERVED (gate-failure mode)
+PACKAGED_RUNTIME_NOT_ESTABLISHED
 
 Packaging:
-NONE — both candidates NOT_READY
+NONE — no SKILL.md / WORKFLOW.md / Agent runtime created
 
 Recommended Next Step (pending authorization):
-Packaging readiness review and/or packaged-Skill invocation experiment
-without treating EXP-M2-004 SUCCESS as unconditional VALIDATED.
+EXP-M2-005 — Minimal Packaged Skill Runtime Experiment for CANDIDATE-001
+without treating packaging as automatic VALIDATED promotion.
 ```
 
 Milestone outputs:
@@ -245,4 +236,5 @@ ai-engineering/milestones/MILESTONE-002/09-stage-e-evidence-sufficiency-and-asse
 ai-engineering/milestones/MILESTONE-002/10-stage-f-exp-m2-003-invocation-and-evidence-capture.md
 ai-engineering/milestones/MILESTONE-002/11-stage-g-exp-m2-003-evidence-assessment-and-lifecycle-reassessment.md
 ai-engineering/milestones/MILESTONE-002/12-stage-h-exp-m2-004-failure-error-path-composition.md
+ai-engineering/milestones/MILESTONE-002/13-stage-i-evidence-consolidation-and-packaging-readiness-review.md
 ```
