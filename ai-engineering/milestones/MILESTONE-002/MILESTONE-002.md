@@ -171,42 +171,43 @@ No treating one experiment as final VALIDATED disposition
 MILESTONE-002
 
 Status:
-IN_PROGRESS
+CLOSED_WITH_OBSERVATIONS
 
-Current Stage:
-Stage L — CANDIDATE-001 Lifecycle Reassessment
-Status: COMPLETED
+Closeout Decision: CLOSE_WITH_OBSERVATIONS
+Closeout Record: 17-milestone-002-closeout-review.md
+
+Mission Assessment: ACHIEVED_WITH_LIMITATIONS
+Evidence Sufficiency: SUFFICIENT_WITH_LIMITATIONS
 
 Completed Stages:
-- Stage A … Stage K (prior)
-- Stage L — CANDIDATE-001 Lifecycle Reassessment
+- Stage A … Stage L (historical; outcomes unchanged)
+- Closeout Review — COMPLETED
 
-Experiments EXP-M2-001 … EXP-M2-006: historical outcomes unchanged
+CANDIDATE-001 Lifecycle: CONDITIONALLY_VALIDATED
+VALIDATED: NO
+PACKAGING_READY: YES (CONDITIONAL / EXPERIMENTAL)
+PACKAGED: NO
+PRODUCTION_READY: NO
+Stage E Disposition: PROMOTE_WITH_CONDITIONS (RETAINED)
 
-Stage L Assessment Result:
-CANDIDATE-001 Lifecycle = CONDITIONALLY_VALIDATED (RETAINED)
-VALIDATED = NO
-PACKAGING_READY = YES (CONDITIONAL / EXPERIMENTAL) (RETAINED)
-PACKAGED = NO
-PRODUCTION_READY = NO
-Stage E Disposition = PROMOTE_WITH_CONDITIONS (RETAINED)
+CANDIDATE-002 Lifecycle: VALIDATION_READY
+Independently VALIDATED: NO
 
-Evidence Summary (Stage L):
-2×2 design-doc/packaged × happy/failure matrix OBSERVED (gate-failure mode)
-Core behavior SATISFIED; dependency composition SATISFIED (mode-bounded)
-Failure handling PARTIAL (ERROR/unavailable/malformed NOT_ESTABLISHED)
-Scope diversity LIMITED; Independent replication NOT_ESTABLISHED
+Key Evidence:
+Real-task experimental invocation (EXP-M2-001…006)
+Design-doc + packaged 2×2 happy/failure (gate-failure mode)
+Dependency composition 001→002; recovery OBSERVED
+Disposition + Stage L lifecycle reassessment
 
-Blocking Gaps for VALIDATED:
-Cross-repository / scope diversity
-Independent replication
-ERROR / unavailable / malformed failure modes
+Key Limitations:
+Single repository; independent replication NOT_ESTABLISHED
+ERROR / unavailable / malformed modes NOT_ESTABLISHED
+VALIDATED = NO; production packaging = NO
 
-CANDIDATE-002 Lifecycle = VALIDATION_READY (UNCHANGED)
-
-Recommended Next Step (pending authorization):
-Close MILESTONE-002 with current disposition, or later authorize an
-experiment targeting a VALIDATED blocking gap — not auto-started.
+Future Work Boundary:
+Do not auto-start MILESTONE-003 or EXP-M2-007.
+Further work requires explicit authorization.
+Experimental packaged SKILL.md remains evidence artifact only.
 ```
 
 Milestone outputs:
@@ -229,5 +230,6 @@ ai-engineering/milestones/MILESTONE-002/13-stage-i-evidence-consolidation-and-pa
 ai-engineering/milestones/MILESTONE-002/14-stage-j-exp-m2-005-packaged-skill-runtime-experiment.md
 ai-engineering/milestones/MILESTONE-002/15-stage-k-exp-m2-006-packaged-skill-failure-path.md
 ai-engineering/milestones/MILESTONE-002/16-stage-l-candidate-001-lifecycle-reassessment.md
+ai-engineering/milestones/MILESTONE-002/17-milestone-002-closeout-review.md
 ai-engineering/milestones/MILESTONE-002/packaged-runtime/candidate-001-targeted-engineering-revision/SKILL.md
 ```
