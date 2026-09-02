@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage F — EXP-M2-003 Invocation & Evidence Capture
+Stage G — EXP-M2-003 Evidence Assessment & Candidate-001 Lifecycle Reassessment
 Status: COMPLETED
 
 Completed Stages:
@@ -189,54 +189,35 @@ Completed Stages:
 - Stage D — Cross-Experiment Evidence Synthesis
 - Stage E — Evidence Sufficiency & Asset Disposition Review
 - Stage F — EXP-M2-003 Invocation & Evidence Capture
+- Stage G — EXP-M2-003 Evidence Assessment & Candidate-001 Lifecycle Reassessment
 
 Experiment EXP-M2-001:
-Single Asset — CANDIDATE-001
-Task: Post-closeout Future Transition Pointer Hygiene
 Outcome: MIXED EVIDENCE (assessment complete)
 
 Experiment EXP-M2-002:
-Single Asset — CANDIDATE-001
-Task: Domain Enum Entity-Level Test Plan Completion
-Assessment: COMPLETED
-Outcome: MIXED EVIDENCE
+Outcome: MIXED EVIDENCE (assessment complete)
 
 Experiment EXP-M2-003:
-Primary Subject — CANDIDATE-001
-Supporting Capability — CANDIDATE-002
-Task: CLI Init Placeholder Exit-Code Contract Correction
-Target Modified: Yes (src/ai_context/cli/main.py; tests/unit/test_cli.py)
-Validation Requirement: YES
-CANDIDATE-002 Requested: YES (VR-M2-003-001)
-CANDIDATE-002 Invoked: SUCCEEDED (design-doc experimental procedure)
-Evidence Consumed: CONSUMED
-Dependency Gap Closure: PARTIALLY_CLOSED
-Experiment Outcome: SUCCESS
-Failure Recovery: NOT TESTED
-Assessment of disposition impact: Deferred to later review stage
+Outcome: SUCCESS (invocation complete)
+Dependency Gap Closure: PARTIALLY_CLOSED (confirmed in Stage G)
+Assessment: COMPLETED (Stage G)
 
-Evidence Base:
-Cross-Experiment Synthesis COMPLETED (Stage D)
-Stage E Disposition: PROMOTE_WITH_CONDITIONS (unchanged)
-Stage F adds dependency-path evidence (happy path)
+Stage G Assessment:
+CANDIDATE-001 Lifecycle: CONDITIONALLY_VALIDATED (RETAINED)
+Stage E Disposition: PROMOTE_WITH_CONDITIONS (RETAINED; conditions recalibrated)
+Dependency Composition: HAPPY_PATH_OBSERVED / FAILURE_PATH_NOT_ESTABLISHED
+Packaging Readiness: NOT_READY
+CANDIDATE-002 Independent Status: VALIDATION_READY (not independently validated)
 
-Evidence Sufficiency (Stage E):
-SUFFICIENT_WITH_LIMITATIONS (unchanged by Stage F)
-
-Asset Disposition (Stage E):
-PROMOTE_WITH_CONDITIONS (unchanged — Stage F does not re-decide)
-
-Lifecycle Status:
-CANDIDATE-001 remains CONDITIONALLY_VALIDATED
-(not promoted to VALIDATED by Stage F)
+Evidence Sufficiency (Stage E baseline):
+SUFFICIENT_WITH_LIMITATIONS — dependency happy path improved; failure path open
 
 Packaging:
 NONE
 
 Recommended Next Step (pending authorization):
-EXP-M2-003 evidence assessment / disposition impact review
-(or failure-path / packaged-Skill follow-up experiments)
-without treating Stage F SUCCESS as unconditional VALIDATED.
+EXP-M2-004 — Failure/ERROR-path composition test (001 ← 002 non-PASSED evidence)
+without treating CONDITIONALLY_VALIDATED as VALIDATED or authorizing packaging.
 ```
 
 Milestone outputs:
@@ -253,4 +234,5 @@ ai-engineering/milestones/MILESTONE-002/07-stage-c3-exp-m2-002-evidence-and-asse
 ai-engineering/milestones/MILESTONE-002/08-stage-d-cross-experiment-evidence-synthesis.md
 ai-engineering/milestones/MILESTONE-002/09-stage-e-evidence-sufficiency-and-asset-disposition.md
 ai-engineering/milestones/MILESTONE-002/10-stage-f-exp-m2-003-invocation-and-evidence-capture.md
+ai-engineering/milestones/MILESTONE-002/11-stage-g-exp-m2-003-evidence-assessment-and-lifecycle-reassessment.md
 ```
