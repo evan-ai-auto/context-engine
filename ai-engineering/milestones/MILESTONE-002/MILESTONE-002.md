@@ -80,7 +80,7 @@ MILESTONE-002 must NOT modify MILESTONE-001 artifacts.
 
 | ID | Name | Type | Status |
 |---|---|---|---|
-| CANDIDATE-001 | Targeted Engineering Revision | SKILL | VALIDATION_READY |
+| CANDIDATE-001 | Targeted Engineering Revision | SKILL | CONDITIONALLY_VALIDATED |
 | CANDIDATE-002 | Repository Tooling Validation Gate | SKILL | VALIDATION_READY |
 | CANDIDATE-003 | Task Closeout Lifecycle | WORKFLOW | VALIDATION_READY |
 | CANDIDATE-004 | Explicit Task Boundary Definition | SKILL | VALIDATION_READY |
@@ -174,7 +174,7 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage D — Cross-Experiment Evidence Synthesis
+Stage E — Evidence Sufficiency & Asset Disposition Review
 Status: COMPLETED
 
 Completed Stages:
@@ -187,6 +187,7 @@ Completed Stages:
 - Stage C2 Revision-001 — Validation Dependency Attribution Correction
 - Stage C3 — EXP-M2-002 Evidence & Assessment
 - Stage D — Cross-Experiment Evidence Synthesis
+- Stage E — Evidence Sufficiency & Asset Disposition Review
 
 Experiment EXP-M2-001:
 Single Asset — CANDIDATE-001
@@ -208,20 +209,28 @@ Cross-Experiment Synthesis COMPLETED
 Combined Evidence Pattern:
 MIXED EVIDENCE
 
-Evidence Sufficiency:
-Assessed — YES, WITH MATERIAL LIMITATIONS
+Evidence Sufficiency (Stage E):
+SUFFICIENT_WITH_LIMITATIONS
 
-Asset Disposition:
-NOT YET PERFORMED
+Asset Disposition (Stage E):
+PROMOTE_WITH_CONDITIONS
 
-Asset Lifecycle Status (unchanged):
-CANDIDATE-001 remains VALIDATION_READY (not VALIDATED)
+Lifecycle Transition (Stage E):
+CANDIDATE-001: VALIDATION_READY → CONDITIONALLY_VALIDATED
+
+Remaining Critical Gap:
+CANDIDATE-001 → CANDIDATE-002 dependency REQUEST/invocation untested
+
+Follow-Up Validation:
+EXP-M2-003 proposed (NOT EXECUTED) — dependency orchestration path
+
+Packaging:
+NONE — SKILL.md / IMPLEMENTATION_READY not authorized by Stage E
 
 Recommended Next Step (pending authorization):
-Asset Disposition Review (Evidence Sufficiency Review + Disposition Decision)
-
-Do not promote lifecycle status, implement assets, package SKILL.md,
-or expand portfolio until authorized disposition stage completes.
+Either (a) EXP-M2-003 dependency-path validation, or
+(b) Portfolio / packaging readiness review under Stage E conditions,
+without treating CONDITIONALLY_VALIDATED as unconditional VALIDATED.
 ```
 
 Milestone outputs:
@@ -236,4 +245,5 @@ ai-engineering/milestones/MILESTONE-002/05-stage-c1-evidence-gap-and-second-expe
 ai-engineering/milestones/MILESTONE-002/06-stage-c2-exp-m2-002-experimental-invocation.md
 ai-engineering/milestones/MILESTONE-002/07-stage-c3-exp-m2-002-evidence-and-assessment.md
 ai-engineering/milestones/MILESTONE-002/08-stage-d-cross-experiment-evidence-synthesis.md
+ai-engineering/milestones/MILESTONE-002/09-stage-e-evidence-sufficiency-and-asset-disposition.md
 ```
