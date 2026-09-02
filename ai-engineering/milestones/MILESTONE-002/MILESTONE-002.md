@@ -174,46 +174,39 @@ Status:
 IN_PROGRESS
 
 Current Stage:
-Stage K — EXP-M2-006 Packaged Skill Failure-Path Composition Test
+Stage L — CANDIDATE-001 Lifecycle Reassessment
 Status: COMPLETED
 
 Completed Stages:
-- Stage A … Stage J (prior)
-- Stage K — EXP-M2-006 Packaged Skill Failure-Path Composition Test
+- Stage A … Stage K (prior)
+- Stage L — CANDIDATE-001 Lifecycle Reassessment
 
-Experiment EXP-M2-001: MIXED EVIDENCE
-Experiment EXP-M2-002: MIXED EVIDENCE
-Experiment EXP-M2-003: SUCCESS (happy-path dependency)
-Experiment EXP-M2-004: SUCCESS (design-doc failure-path FAILED → BLOCKED)
-Experiment EXP-M2-005: SUCCESS (packaged Skill happy path PASSED → RESOLVED)
-Experiment EXP-M2-006: SUCCESS (packaged Skill failure-path FAILED → BLOCKED)
+Experiments EXP-M2-001 … EXP-M2-006: historical outcomes unchanged
 
-Stage J vs Stage K:
-Stage J: Packaged happy path (Aggregate PASSED → RESOLVED)
-Stage K: Packaged failure path (Aggregate FAILED → BLOCKED; recovery OBSERVED)
-
-EXP-M2-006 Summary:
-Packaged Skill execution object: OBSERVED
-Validation Requirement: YES
-Validation Request: VR-M2-006-001
-Gate Failure: Unit Tests FAILED (assertion mismatch; temporary; restored)
-Aggregate Validation Evidence: FAILED
-Evidence Consumption: OBSERVED
-Disposition: BLOCKED
-RESOLVED During Failure: NO
-Recovery: OBSERVED → Post-Recovery Aggregate PASSED
-Design-doc vs Packaged Failure Path: MATCHED (gate-failure mode)
-
-Lifecycle Status (unchanged by Stage K experiment):
-CANDIDATE-001 = CONDITIONALLY_VALIDATED
+Stage L Assessment Result:
+CANDIDATE-001 Lifecycle = CONDITIONALLY_VALIDATED (RETAINED)
 VALIDATED = NO
-PACKAGING_READY = YES (CONDITIONAL / EXPERIMENTAL)
-PACKAGED (production) = NO
-CANDIDATE-002 = VALIDATION_READY
+PACKAGING_READY = YES (CONDITIONAL / EXPERIMENTAL) (RETAINED)
+PACKAGED = NO
+PRODUCTION_READY = NO
+Stage E Disposition = PROMOTE_WITH_CONDITIONS (RETAINED)
 
-Recommended Next Step (pending authorization / review):
-Lifecycle reassessment after packaged happy+failure evidence
-without treating EXP-M2-006 SUCCESS as automatic VALIDATED.
+Evidence Summary (Stage L):
+2×2 design-doc/packaged × happy/failure matrix OBSERVED (gate-failure mode)
+Core behavior SATISFIED; dependency composition SATISFIED (mode-bounded)
+Failure handling PARTIAL (ERROR/unavailable/malformed NOT_ESTABLISHED)
+Scope diversity LIMITED; Independent replication NOT_ESTABLISHED
+
+Blocking Gaps for VALIDATED:
+Cross-repository / scope diversity
+Independent replication
+ERROR / unavailable / malformed failure modes
+
+CANDIDATE-002 Lifecycle = VALIDATION_READY (UNCHANGED)
+
+Recommended Next Step (pending authorization):
+Close MILESTONE-002 with current disposition, or later authorize an
+experiment targeting a VALIDATED blocking gap — not auto-started.
 ```
 
 Milestone outputs:
@@ -235,5 +228,6 @@ ai-engineering/milestones/MILESTONE-002/12-stage-h-exp-m2-004-failure-error-path
 ai-engineering/milestones/MILESTONE-002/13-stage-i-evidence-consolidation-and-packaging-readiness-review.md
 ai-engineering/milestones/MILESTONE-002/14-stage-j-exp-m2-005-packaged-skill-runtime-experiment.md
 ai-engineering/milestones/MILESTONE-002/15-stage-k-exp-m2-006-packaged-skill-failure-path.md
+ai-engineering/milestones/MILESTONE-002/16-stage-l-candidate-001-lifecycle-reassessment.md
 ai-engineering/milestones/MILESTONE-002/packaged-runtime/candidate-001-targeted-engineering-revision/SKILL.md
 ```
